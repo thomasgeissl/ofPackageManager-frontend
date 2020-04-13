@@ -1,7 +1,6 @@
 import { ipcRenderer } from "electron";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
@@ -26,15 +25,14 @@ ipcRenderer.on("doesDirectoryExistResponse", (event, arg) => {
 
 export default () => {
   const dispatch = useDispatch();
-  const config = useSelector(state => state.config);
+  const config = useSelector((state) => state.config);
   const defaultProjectPath = useSelector(
-    state => state.config.defaultProjectPath
+    (state) => state.config.defaultProjectPath
   );
-  const verboseOutput = useSelector(state => state.config.verboseOutput);
+  const verboseOutput = useSelector((state) => state.config.verboseOutput);
   const [location, setLocation] = useState("");
   const [cwd, setCwd] = useState("");
   const [valid, setValid] = useState(false);
-  const history = useHistory();
   doesDirectoryExistResponseCallback = (event, arg) => {
     setValid(arg.value);
     setCwd(arg.path);
@@ -47,23 +45,23 @@ export default () => {
         <TextField
           label="location"
           value={location}
-          onChange={event => {}}
-          onKeyPress={event => {}}
-          onClick={event => {
+          onChange={(event) => {}}
+          onKeyPress={(event) => {}}
+          onClick={(event) => {
             dialog
               .showOpenDialog({
                 defaultPath: defaultProjectPath,
-                properties: ["openDirectory"]
+                properties: ["openDirectory"],
               })
-              .then(result => {
+              .then((result) => {
                 if (result.filePaths.length) {
                   setLocation(result.filePaths[0]);
                   ipcRenderer.send("doesDirectoryExist", {
-                    location: result.filePaths[0]
+                    location: result.filePaths[0],
                   });
                 }
               })
-              .catch(err => {
+              .catch((err) => {
                 console.log(err);
               });
           }}
@@ -74,13 +72,13 @@ export default () => {
             <Button
               variant="contained"
               disabled={!valid}
-              onClick={event => {
+              onClick={(event) => {
                 //   ipcRenderer.send("createDirectory", { path: cwd });
                 // ipcRenderer.send("getConfig", {});
                 ipcRenderer.send("updateMultiple", {
                   config,
                   path: cwd,
-                  verboseOutput
+                  verboseOutput,
                 });
               }}
             >

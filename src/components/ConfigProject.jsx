@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron";
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -22,15 +22,6 @@ const Headline = styled.h2`
   margin-bottom: 10px;
 `;
 const Subline = styled.h3``;
-const Description = styled.span`
-  font-size: 0.5em;
-`;
-
-const ProjectInfo = styled.section`
-  margin-top: 15px;
-  margin-bottom: 15px;
-  text-align: left;
-`;
 
 const StyledGenerator = styled(Generator)`
   position: fixed;
@@ -46,15 +37,13 @@ const StyledBox = styled(Box)`
 `;
 
 export default () => {
-  const cwd = useSelector(state => state.project.cwd);
-  const name = useSelector(state => state.project.name);
-  const config = useSelector(state => state.config);
-  const ofPath = useSelector(state => state.config.ofPath);
+  const cwd = useSelector((state) => state.project.cwd);
+  const config = useSelector((state) => state.config);
   const locallyInstalledPackages = useSelector(
-    state => state.localPackages.packages
+    (state) => state.localPackages.packages
   );
   const showAdvancedFeatures = useSelector(
-    state => state.config.showAdvancedFeatures
+    (state) => state.config.showAdvancedFeatures
   );
   return (
     <>
@@ -63,12 +52,12 @@ export default () => {
         <Headline>
           Select or install addons{" "}
           <RefreshButton
-            onClick={event => {
+            onClick={(event) => {
               ipcRenderer.send("getCoreAddons", { config });
               ipcRenderer.send("getGloballyInstalledPackages", { config });
               ipcRenderer.send("getLocallyInstalledPackages", {
                 config,
-                cwd
+                cwd,
               });
             }}
           ></RefreshButton>

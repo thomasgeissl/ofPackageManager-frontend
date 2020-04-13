@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -14,8 +14,8 @@ const Console = styled.div`
   padding-right: 5px;
 `;
 export default () => {
-  const output = useSelector(state => state.console.output);
-  const showConsole = useSelector(state => state.config.showConsole);
+  const output = useSelector((state) => state.console.output);
+  const showConsole = useSelector((state) => state.config.showConsole);
   const consoleRef = useRef(null);
   if (consoleRef.current) {
     window.scrollTo(0, consoleRef.current.scrollHeight);
@@ -27,7 +27,7 @@ export default () => {
         <Console ref={consoleRef}>
           {output === ""
             ? output
-            : output.split("\n").map(function(item, key) {
+            : output.split("\n").map(function (item, key) {
                 return (
                   <span key={key}>
                     {item}

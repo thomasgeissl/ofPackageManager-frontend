@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -14,16 +14,16 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250
-    }
-  }
+      width: 250,
+    },
+  },
 };
 
 export default () => {
   const dispatch = useDispatch();
-  const templates = useSelector(state => state.templates.templates);
-  const selected = useSelector(state => state.templates.selected);
-  const handleChange = event => {
+  const templates = useSelector((state) => state.templates.templates);
+  const selected = useSelector((state) => state.templates.selected);
+  const handleChange = (event) => {
     // multiple
     // dispatch(setSelectedTemplates(event.target.value));
     // single
@@ -38,7 +38,7 @@ export default () => {
         value={selected}
         onChange={handleChange}
         input={<Input />}
-        renderValue={selected => (
+        renderValue={(selected) => (
           <div>
             {/* {selected.map(value => ( */}
             <Chip key={selected} label={selected} />
@@ -47,7 +47,7 @@ export default () => {
         )}
         MenuProps={MenuProps}
       >
-        {templates.map(name => (
+        {templates.map((name) => (
           <MenuItem key={name} value={name}>
             {name}
           </MenuItem>

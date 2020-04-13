@@ -3,10 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Tooltip from "@material-ui/core/Tooltip";
-import styled from "styled-components";
 import {
   addGlobalPackage,
-  removeGlobalPackage
+  removeGlobalPackage,
 } from "../state/reducers/globalPackages";
 
 import PackageList from "./PackageList";
@@ -17,7 +16,7 @@ import PackageList from "./PackageList";
 
 export default () => {
   const dispatch = useDispatch();
-  const handleChange = p => {
+  const handleChange = (p) => {
     return (event, value) => {
       if (value) {
         dispatch(addGlobalPackage(p));
@@ -26,20 +25,24 @@ export default () => {
       }
     };
   };
-  const packages = useSelector(state => state.globalPackages.globalPackages);
-  const selectedPackages = useSelector(state => state.globalPackages.selected);
+  const packages = useSelector((state) => state.globalPackages.globalPackages);
+  const selectedPackages = useSelector(
+    (state) => state.globalPackages.selected
+  );
   // const isPackageInstalled = value => {
   //   const index = packages.findIndex(item => item.path === value.path);
   //   return index > -1;
   // };
-  const isPackageSelected = value => {
-    const index = selectedPackages.findIndex(item => item.path === value.path);
+  const isPackageSelected = (value) => {
+    const index = selectedPackages.findIndex(
+      (item) => item.path === value.path
+    );
     return index > -1;
   };
   return (
     <>
       <PackageList>
-        {packages.map(function(value, index) {
+        {packages.map(function (value, index) {
           return (
             <li key={index}>
               <Tooltip title={`${value.url}@${value.checkout}`}>

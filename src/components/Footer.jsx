@@ -8,12 +8,13 @@ const Container = styled.footer`
   padding-bottom: 5px;
 `;
 export default () => {
-  const version = useSelector(state => state.meta.ofPackageManagerVersion);
+  const version = useSelector((state) => state.meta.ofPackageManagerVersion);
   return (
     <Container>
       <a
         href="https://github.com/thomasgeissl/ofPackageManager"
         target="_blank"
+        rel="noopener noreferrer"
       >
         ofPackageManager
       </a>{" "}

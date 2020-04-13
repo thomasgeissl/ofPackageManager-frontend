@@ -11,21 +11,21 @@ import { setOfPackageManagerVersion } from "./state/reducers/meta";
 import { setConfig } from "./state/reducers/config";
 import {
   setAvailableCoreAddons,
-  addCoreAddon
+  addCoreAddon,
 } from "./state/reducers/corePackages";
 import {
   setAvailableGlobalPackages,
-  addGlobalPackage
+  addGlobalPackage,
 } from "./state/reducers/globalPackages";
 import {
   setAvailableLocalPackages,
   setPackagesDatabase,
-  addLocalPackage
+  addLocalPackage,
 } from "./state/reducers/localPackages";
 import { addPlatform } from "./state/reducers/platforms";
 import {
   setAvailableTemplates,
-  setSelectedTemplate
+  setSelectedTemplate,
 } from "./state/reducers/templates";
 
 ReactDOM.render(<App />, document.getElementById("root"));
@@ -55,13 +55,13 @@ ipcRenderer.on("getAvailablePackagesResponse", (event, arg) => {
   store.dispatch(setPackagesDatabase(arg.payload.data));
 });
 ipcRenderer.on("getPackagesListedInAddonsMakeResponse", (event, arg) => {
-  arg.payload.data.forEach(p => {
+  arg.payload.data.forEach((p) => {
     if (p.path.startsWith("local_addons")) {
       store.dispatch(addLocalPackage(p));
     } else {
       const coreAddons = store.getState().corePackages.coreAddons;
       let isCorePackage = false;
-      for (const [index, el] of coreAddons.entries()) {
+      for (const el of coreAddons.entries()) {
         if (el === p.path) {
           isCorePackage = true;
           break;

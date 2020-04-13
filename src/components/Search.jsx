@@ -1,11 +1,10 @@
 import { ipcRenderer } from "electron";
-import React, { useState, useReducer } from "react";
+import React, { useReducer } from "react";
 import { useSelector } from "react-redux";
 import { Button, Grid, TextField } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import styled from "styled-components";
 
-import GitHubIcon from "@material-ui/icons/GitHub";
 import StarIcon from "@material-ui/icons/Star";
 import ForkIcon from "@material-ui/icons/Restaurant";
 import InstallIcon from "@material-ui/icons/GetApp";
@@ -61,7 +60,7 @@ const DatabaseResultItem = styled.li`
   /* border-left: 5px solid rgba(231, 27, 116, 1); */
 `;
 
-const isGitUrl = value => {
+const isGitUrl = (value) => {
   const suffix = ".git";
   return value.indexOf(suffix, value.length - suffix.length) !== -1;
 };
@@ -70,7 +69,7 @@ const initialState = {
   query: "",
   result: [],
   databaseResult: [],
-  urlResult: []
+  urlResult: [],
 };
 function reducer(state, action) {
   switch (action.type) {
@@ -98,13 +97,12 @@ function reducer(state, action) {
       return state;
     // throw new Error();
   }
-  return state;
 }
 export default () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const config = useSelector(state => state.config);
-  const cwd = useSelector(state => state.project.cwd);
-  const database = useSelector(state => state.localPackages.database);
+  const config = useSelector((state) => state.config);
+  const cwd = useSelector((state) => state.project.cwd);
+  const database = useSelector((state) => state.localPackages.database);
 
   const { query, result, databaseResult, urlResult } = state;
 
@@ -112,7 +110,7 @@ export default () => {
     if (value) {
       dispatch({
         type: "SETQUERY",
-        payload: { value }
+        payload: { value },
       });
     }
   };
@@ -123,7 +121,7 @@ export default () => {
 
     // database
     let databaseR = [];
-    database.forEach(value => {
+    database.forEach((value) => {
       if (value.name.toLowerCase().search(query.toLowerCase()) > -1) {
         value.tags = ["latest"];
         value.checkout = "latest";
@@ -138,18 +136,20 @@ export default () => {
           .split(" ")
           .pop()}/repos?per_page=100`
       )
-        .then(res => res.json())
-        .then(data => {
-          data.forEach(item => {
+        .then((res) => res.json())
+        .then((data) => {
+          data.forEach((item) => {
             item.tags = ["latest"];
             item.checkout = "latest";
           });
           return data;
         })
-        .then(data => {
+        .then((data) => {
           dispatch({
             type: "SETRESULT",
-            payload: { value: data.filter(item => item.name.startsWith("ofx")) }
+            payload: {
+              value: data.filter((item) => item.name.startsWith("ofx")),
+            },
           });
         })
         .catch(console.log);
@@ -157,16 +157,16 @@ export default () => {
       fetch(
         `https://api.github.com/search/repositories?q=${query}&sort=stars&order=desc`
       )
-        .then(res => res.json())
-        .then(data => (data ? data.items : []))
-        .then(data => {
-          data.forEach(item => {
+        .then((res) => res.json())
+        .then((data) => (data ? data.items : []))
+        .then((data) => {
+          data.forEach((item) => {
             item.tags = ["latest"];
             item.checkout = "latest";
           });
           return data;
         })
-        .then(data => {
+        .then((data) => {
           dispatch({ type: "SETRESULT", payload: { value: data } });
         })
         .catch(console.log);
@@ -177,8 +177,8 @@ export default () => {
         type: "SETURLRESULT",
         payload: {
           checkout: "latest",
-          value: [{ value: query, checkout: "latest" }]
-        }
+          value: [{ value: query, checkout: "latest" }],
+        },
       });
     }
   };
@@ -188,21 +188,21 @@ export default () => {
         <StyledBox flexGrow={1}>
           <Autocomplete
             freeSolo
-            options={database.map(option => option.name)}
+            options={database.map((option) => option.name)}
             onChange={handleChange}
-            renderInput={params => (
+            renderInput={(params) => (
               <TextField
                 {...params}
                 label="name, user (e.g. user ofZach) or git url"
                 margin="normal"
                 variant="outlined"
-                onChange={event => {
+                onChange={(event) => {
                   dispatch({
                     type: "SETQUERY",
-                    payload: { value: event.target.value }
+                    payload: { value: event.target.value },
                   });
                 }}
-                onKeyPress={event => {
+                onKeyPress={(event) => {
                   if (event.charCode === 13) {
                     handleSearch();
                   }
@@ -216,7 +216,7 @@ export default () => {
         <StyledBox>
           <StyledSearchButton
             variant="contained"
-            onClick={event => {
+            onClick={(event) => {
               handleSearch();
             }}
           ></StyledSearchButton>
@@ -226,7 +226,7 @@ export default () => {
       <Results>
         <ul>
           {/* database results */}
-          {databaseResult.map(function(item, index) {
+          {databaseResult.map(function (item, index) {
             return (
               <DatabaseResultItem key={index}>
                 <StyledListItemContent>
@@ -248,19 +248,19 @@ export default () => {
                       onChange={(event, value) => {
                         dispatch({
                           type: "SETDATABASECHECKOUT",
-                          payload: { index, value }
+                          payload: { index, value },
                         });
                       }}
-                      renderInput={params => (
+                      renderInput={(params) => (
                         <TextField
                           {...params}
                           label="tag or commit hash"
                           margin="none"
                           variant="outlined"
-                          onChange={event => {
+                          onChange={(event) => {
                             dispatch({
                               type: "SETDATABASECHECKOUT",
-                              payload: { index, value: event.target.value }
+                              payload: { index, value: event.target.value },
                             });
                           }}
                           fullWidth
@@ -271,13 +271,13 @@ export default () => {
                   <Grid item>
                     <StyledButton
                       variant="contained"
-                      onClick={event => {
+                      onClick={(event) => {
                         console.log("install package by url", item);
                         ipcRenderer.send("installPackageByUrl", {
                           config,
                           url: item.cloneUrl,
                           checkout: item.checkout,
-                          cwd
+                          cwd,
                         });
                       }}
                     >
@@ -289,7 +289,7 @@ export default () => {
             );
           })}
           {Array.isArray(result) &&
-            urlResult.map(function(item, index) {
+            urlResult.map(function (item, index) {
               return (
                 <li key={index}>
                   <StyledListItemContent>{item}</StyledListItemContent>
@@ -302,19 +302,19 @@ export default () => {
                         onChange={(event, value) => {
                           dispatch({
                             type: "SETURLCHECKOUT",
-                            payload: { index, value }
+                            payload: { index, value },
                           });
                         }}
-                        renderInput={params => (
+                        renderInput={(params) => (
                           <TextField
                             {...params}
                             label="tag or commit hash"
                             margin="none"
                             variant="outlined"
-                            onChange={event => {
+                            onChange={(event) => {
                               dispatch({
                                 type: "SETURLCHECKOUT",
-                                payload: { index, value: event.target.value }
+                                payload: { index, value: event.target.value },
                               });
                             }}
                             fullWidth
@@ -325,12 +325,12 @@ export default () => {
                     <Grid item>
                       <StyledButton
                         variant="contained"
-                        onClick={event => {
+                        onClick={(event) => {
                           ipcRenderer.send("installPackageByUrl", {
                             config,
                             url: item.value,
                             checkout: item.checkout,
-                            cwd
+                            cwd,
                           });
                         }}
                       >
@@ -342,15 +342,23 @@ export default () => {
               );
             })}
           {Array.isArray(result) &&
-            result.map(function(item, index) {
+            result.map(function (item, index) {
               return (
                 <li key={index}>
                   <StyledListItemContent>
-                    <a href={item.owner.html_url} target="_blank">
+                    <a
+                      href={item.owner.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       {item.owner.login}
                     </a>{" "}
                     /{" "}
-                    <a href={item.html_url} target="_blank">
+                    <a
+                      href={item.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       {item.name}
                     </a>
                     <div>{item.description}</div>
@@ -359,7 +367,11 @@ export default () => {
                         <StarIcon></StarIcon> {item.stargazers_count}
                       </Grid>
                       <Grid item>
-                        <a href={item.html_url + "/network"} target="_blank">
+                        <a
+                          href={item.html_url + "/network"}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <ForkIcon></ForkIcon> {item.forks_count}
                         </a>
                       </Grid>
@@ -381,19 +393,19 @@ export default () => {
                         onChange={(event, value) => {
                           dispatch({
                             type: "SETCHECKOUT",
-                            payload: { index, value }
+                            payload: { index, value },
                           });
                         }}
-                        renderInput={params => (
+                        renderInput={(params) => (
                           <TextField
                             {...params}
                             label="tag or commit hash"
                             margin="none"
                             variant="outlined"
-                            onChange={event => {
+                            onChange={(event) => {
                               dispatch({
                                 type: "SETCHECKOUT",
-                                payload: { index, value: event.target.value }
+                                payload: { index, value: event.target.value },
                               });
                             }}
                             fullWidth
@@ -404,12 +416,12 @@ export default () => {
                     <Grid item>
                       <StyledButton
                         variant="contained"
-                        onClick={event => {
+                        onClick={(event) => {
                           ipcRenderer.send("installPackageByUrl", {
                             config,
                             url: item.clone_url,
                             checkout: item.checkout,
-                            cwd
+                            cwd,
                           });
                         }}
                       >

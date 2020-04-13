@@ -28,7 +28,7 @@ export default () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const showAdvancedFeatures = useSelector(
-    state => state.config.showAdvancedFeatures
+    (state) => state.config.showAdvancedFeatures
   );
 
   return (
@@ -95,6 +95,7 @@ export default () => {
         <a
           href="https://thomasgeissl.github.io/ofPackageManager/"
           target="_blank"
+          rel="noopener noreferrer"
         >
           website
         </a>
