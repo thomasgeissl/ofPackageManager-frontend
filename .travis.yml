@@ -4,10 +4,10 @@ matrix:
       language: node_js
       node_js: "12"
 
-    - os: linux
-      dist: xenial
-      sudo: required
-      language: node_js
+    # - os: linux
+    #   dist: xenial
+    #   sudo: required
+    #   language: node_js
 
 language: node_js
 node_js:
