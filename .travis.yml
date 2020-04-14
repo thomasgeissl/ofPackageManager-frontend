@@ -14,5 +14,7 @@ node_js:
   - 12
 
 script:
+  - git clone https://github.com/thomasgeissl/ofTravis.git
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then source ./ofTravis/osx/add_certificate.sh; fi
   - yarn install
   - yarn electron-dist
