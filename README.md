@@ -1,5 +1,15 @@
 # ofPackageManager frontend
 
+## Description
+
+electron frontend for [ofPackageManager](https://github.com/thomasgeissl/ofPackageManager).
+
+## Build status
+
+[![Build Status](https://travis-ci.com/thomasgeissl/ofPackageManager-frontend.svg?branch=master)](https://travis-ci.com/thomasgeissl/ofPackageManager-frontend)
+
+## Development
+
 - install node: `brew install node`
 - install yarn: `npm install -g yarn`
 - install dependencies: `yarn install`
