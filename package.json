@@ -1,6 +1,6 @@
 {
   "name": "ofpackagemanagerfrontend",
-  "version": "0.1.0",
+  "version": "0.0.19",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.8.0",
@@ -61,18 +61,22 @@
   "author": {
     "name": "Thomas Geissl",
     "email": "thomas.geissl@gmail.com",
-    "url": "https://your-website.com"
+    "url": "http://thomasgeissl.com"
   },
   "build": {
-    "appId": "com.my-website.my-app",
+    "appId": "com.thomasgeissl.ofPackageManager-frontend",
     "productName": "ofPackageManager",
     "copyright": "Copyright © 2019 ${author}",
     "mac": {
-      "category": "public.app-category.utilities",
+      "target": "dmg",
+      "category": "public.app-category.developer-tools",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "win": {
+      "target": "portable"
     },
     "files": [
       "build/**/*",
@@ -80,6 +84,7 @@
     ],
     "directories": {
       "buildResources": "assets"
-    }
+    },
+    "afterSign": "scripts/notarize.js"
   }
 }
