@@ -27,9 +27,14 @@ ipcRenderer.on("doesDirectoryExistResponse", (event, arg) => {
 
 export default () => {
   const dispatch = useDispatch();
-  const config = useSelector(state => state.config);
+  const cliConfig = useSelector((state) => state.cliConfig);
+  const frontendConfig = useSelector((state) => state.config);
+  const config = {
+    ...cliConfig,
+    ...frontendConfig,
+  };
   const defaultProjectPath = useSelector(
-    state => state.config.defaultProjectPath
+    (state) => state.config.defaultProjectPath
   );
   const [location, setLocation] = useState(defaultProjectPath);
   const [name, setName] = useState("");
@@ -51,20 +56,20 @@ export default () => {
         <TextField
           label="location"
           value={location}
-          onChange={event => {}}
-          onKeyPress={event => {}}
-          onClick={event => {
+          onChange={(event) => {}}
+          onKeyPress={(event) => {}}
+          onClick={(event) => {
             dialog
               .showOpenDialog({
                 defaultPath: defaultProjectPath,
-                properties: ["openDirectory"]
+                properties: ["openDirectory"],
               })
-              .then(result => {
+              .then((result) => {
                 if (result.filePaths.length) {
                   setLocation(result.filePaths[0]);
                 }
               })
-              .catch(err => {
+              .catch((err) => {
                 console.log(err);
               });
           }}
@@ -73,14 +78,14 @@ export default () => {
         <TextField
           label="name"
           value={name}
-          onChange={event => {
+          onChange={(event) => {
             setName(event.target.value);
             ipcRenderer.send("doesDirectoryExist", {
               location,
-              name: event.target.value
+              name: event.target.value,
             });
           }}
-          onKeyPress={event => {}}
+          onKeyPress={(event) => {}}
           fullWidth
         />
         <Actions container alignItems="flex-start" justify="flex-end">
@@ -88,14 +93,14 @@ export default () => {
             <Button
               variant="contained"
               disabled={!valid}
-              onClick={event => {
+              onClick={(event) => {
                 //   ipcRenderer.send("createDirectory", { path: cwd });
                 ipcRenderer.send("createProject", { config, path: cwd });
                 ipcRenderer.send("getCoreAddons", { config });
                 ipcRenderer.send("getGloballyInstalledPackages", { config });
                 ipcRenderer.send("getLocallyInstalledPackages", {
                   config,
-                  cwd
+                  cwd,
                 });
                 ipcRenderer.send("getAvailablePackages", { config });
                 history.push("/configProject");

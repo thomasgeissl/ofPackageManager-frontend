@@ -2,6 +2,7 @@ import { combineReducers, createStore } from "redux";
 
 import meta from "./reducers/meta";
 import config from "./reducers/config";
+import cliConfig from "./reducers/cliConfig";
 import project from "./reducers/project";
 import console from "./reducers/console";
 import notification from "./reducers/notification";
@@ -15,6 +16,7 @@ export default createStore(
   combineReducers({
     meta,
     config,
+    cliConfig,
     project,
     console,
     notification,
@@ -22,6 +24,6 @@ export default createStore(
     globalPackages,
     localPackages,
     platforms,
-    templates
+    templates,
   })
 );

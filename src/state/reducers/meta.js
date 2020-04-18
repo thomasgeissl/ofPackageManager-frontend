@@ -1,32 +1,32 @@
 const initialState = {
-  ofPackageManagerVersion: {
+  ofPackageManagerCliVersion: {
     major: -1,
     minor: -1,
-    patch: -1
-  }
+    patch: -1,
+  },
 };
 
 const types = {
-  SETOFPACKAGEMANAGERVERSION: "SETOFPACKAGEMANAGERVERSION"
+  SETOFPACKAGEMANAGERCLIVERSION: "SETOFPACKAGEMANAGERCLIVERSION",
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.SETOFPACKAGEMANAGERVERSION:
+    case types.SETOFPACKAGEMANAGERCLIVERSION:
       return {
         ...state,
-        ofPackageManagerVersion: action.payload.value
+        ofPackageManagerCliVersion: action.payload.value,
       };
     default:
       return state;
   }
 };
 
-export const setOfPackageManagerVersion = value => {
+export const setOfPackageManagerCliVersion = (value) => {
   return {
-    type: types.SETOFPACKAGEMANAGERVERSION,
+    type: types.SETOFPACKAGEMANAGERCLIVERSION,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };

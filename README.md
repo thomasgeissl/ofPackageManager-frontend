@@ -11,7 +11,7 @@ electron frontend for [ofPackageManager](https://github.com/thomasgeissl/ofPacka
 ## Development
 
 - install node: `brew install node`
-- install yarn: `npm install -g yarn`
+- install yarn globally: `npm install -g yarn`
 - install dependencies: `yarn install`
 - change paths in `public/assets/config.json`
 - run in dev mode: `yarn electron-dev`

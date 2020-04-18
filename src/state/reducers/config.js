@@ -2,16 +2,13 @@ const initialState = {
   showAdvancedFeatures: false,
   showConsole: false,
   verboseOutput: false,
-  localAddonsPath: "",
-  ofPath: "",
   defaultProjectPath: "",
-  packagesPath: "",
   ofPackageManagerPath: "",
-  pgPath: ""
+  ofProjectGeneratorPath: "",
 };
 
 const types = {
-  SETCONFIG: "SETCONFIG",
+  SETFRONTENDCONFIG: "SETFRONTENDCONFIG",
   SETSHOWADVANCEDFEATURES: "SETSHOWADVANCEDFEATURES",
   SETSHOWCONSOLE: "SETSHOWCONSOLE",
   SETVERBOSEOUTPUT: "SETVERBOSEOUTPUT",
@@ -20,58 +17,52 @@ const types = {
   SETDEFAULTPROJECTPATH: "SETDEFAULTPROJECTPATH",
   SETPROJECTGENERATORPATH: "SETPROJECTGENERATORPATH",
   SETOFPACKAGEMANAGERPATH: "SETOFPACKAGEMANAGERPATH",
-  SETOFPACKAGESPATH: "SETOFPACKAGESPATH"
+  SETOFPACKAGESPATH: "SETOFPACKAGESPATH",
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.SETCONFIG:
+    case types.SETFRONTENDCONFIG:
+      console.log("setconfig", action.payload);
       const newState = {
         ...state,
-        ...action.payload.value
+        ...action.payload.value,
       };
-      // console.log("payload.value", action.payload.value);
-      // console.log("new state", newState);
       return newState;
     case types.SETSHOWADVANCEDFEATURES:
       return {
         ...state,
-        showAdvancedFeatures: action.payload.value
+        showAdvancedFeatures: action.payload.value,
       };
     case types.SETSHOWCONSOLE:
       return {
         ...state,
-        showConsole: action.payload.value
+        showConsole: action.payload.value,
       };
     case types.SETVERBOSEOUTPUT:
       return {
         ...state,
-        verboseOutput: action.payload.value
-      };
-    case types.SETOFPATH:
-      return {
-        ...state,
-        ofPath: action.payload.value
+        verboseOutput: action.payload.value,
       };
     case types.SETDEFAULTPROJECTPATH:
       return {
         ...state,
-        defaultProjectPath: action.payload.value
+        defaultProjectPath: action.payload.value,
       };
     case types.SETOFPACKAGEMANAGERPATH:
       return {
         ...state,
-        ofPackageManagerPath: action.payload.value
+        ofPackageManagerPath: action.payload.value,
       };
     case types.SETOFPACKAGESPATH:
       return {
         ...state,
-        packagesPath: action.payload.value
+        ofPackagesPath: action.payload.value,
       };
     case types.SETPROJECTGENERATORPATH:
       return {
         ...state,
-        pgPath: action.payload.value
+        ofProjectGeneratorPath: action.payload.value,
       };
 
     default:
@@ -79,85 +70,85 @@ export default (state = initialState, action) => {
   }
 };
 
-export const setConfig = value => {
+export const setConfig = (value) => {
   return {
-    type: types.SETCONFIG,
+    type: types.SETFRONTENDCONFIG,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const setShowAdvancedFeatures = value => {
+export const setShowAdvancedFeatures = (value) => {
   return {
     type: types.SETSHOWADVANCEDFEATURES,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const setShowConsole = value => {
+export const setShowConsole = (value) => {
   return {
     type: types.SETSHOWCONSOLE,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const setVerboseOutput = value => {
+export const setVerboseOutput = (value) => {
   return {
     type: types.SETVERBOSEOUTPUT,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const setPackageManagerVersion = value => {
+export const setPackageManagerVersion = (value) => {
   return {
     type: types.SETPACKAGEMANAGERVERSION,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
 
-export const setOfPath = value => {
+export const setOfPath = (value) => {
   return {
     type: types.SETOFPATH,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const setDefaultProjectPath = value => {
+export const setDefaultProjectPath = (value) => {
   return {
     type: types.SETDEFAULTPROJECTPATH,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const setOfPackageManagerPath = value => {
+export const setOfPackageManagerPath = (value) => {
   return {
     type: types.SETOFPACKAGEMANAGERPATH,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const setOfPackagesPath = value => {
+export const setOfPackagesPath = (value) => {
   return {
     type: types.SETOFPACKAGESPATH,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
 
-export const setProjectGeneratorPath = value => {
+export const setProjectGeneratorPath = (value) => {
   return {
     type: types.SETPROJECTGENERATORPATH,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };

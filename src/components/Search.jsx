@@ -100,7 +100,9 @@ function reducer(state, action) {
 }
 export default () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const config = useSelector((state) => state.config);
+  const cliConfig = useSelector((state) => state.cliConfig);
+  const frontendConfig = useSelector((state) => state.config);
+  const config = { ...cliConfig, ...frontendConfig };
   const cwd = useSelector((state) => state.project.cwd);
   const database = useSelector((state) => state.localPackages.database);
 

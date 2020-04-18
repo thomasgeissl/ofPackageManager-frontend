@@ -25,7 +25,12 @@ ipcRenderer.on("doesDirectoryExistResponse", (event, arg) => {
 
 export default () => {
   const dispatch = useDispatch();
-  const config = useSelector((state) => state.config);
+  const cliConfig = useSelector((state) => state.cliConfig);
+  const frontendConfig = useSelector((state) => state.config);
+  const config = {
+    ...cliConfig,
+    ...frontendConfig,
+  };
   const defaultProjectPath = useSelector(
     (state) => state.config.defaultProjectPath
   );

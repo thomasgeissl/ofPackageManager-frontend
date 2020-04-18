@@ -1,14 +1,17 @@
 const { ipcMain } = require("electron");
+const os = require("os");
 const fs = require("fs");
 const path = require("path");
 const { logAndSendToWebConsole } = require("./utils.js");
+
+const home = os.homedir();
 
 ipcMain.on("doesDirectoryExist", (event, arg) => {
   event.reply("doesDirectoryExistResponse", {
     path: arg.name ? path.join(arg.location, arg.name) : arg.location,
     value: arg.name
       ? fs.existsSync(path.join(arg.location, arg.name))
-      : fs.existsSync(arg.location)
+      : fs.existsSync(arg.location),
   });
 });
 
@@ -39,8 +42,29 @@ ipcMain.on("readJsonFile", (event, arg) => {
   // console.log(data);
   event.reply("readJsonFileResponse", {
     path: arg.path,
-    content: data
+    content: data,
   });
+});
+
+ipcMain.on("getFrontendConfig", (event, arg) => {
+  const rawdata = fs.readFileSync(
+    path.join(os.homedir(), ".ofPackageManager/frontend.config.json")
+  );
+  const data = JSON.parse(rawdata);
+  event.reply("getFrontendConfigResponse", data);
+});
+ipcMain.on("saveFrontendConfig", (event, arg) => {
+  fs.writeFileSync(
+    path.join(os.homedir(), ".ofPackageManager/frontend.config.json"),
+    JSON.stringify(arg.content, {}, 2)
+  );
+});
+ipcMain.on("getCliConfig", (event, arg) => {
+  const rawdata = fs.readFileSync(
+    path.join(os.homedir(), ".ofPackageManager/cli.config.json")
+  );
+  const data = JSON.parse(rawdata);
+  event.reply("getCliConfigResponse", data);
 });
 
 ipcMain.on("getPlatform", (event, arg) => {
@@ -48,7 +72,7 @@ ipcMain.on("getPlatform", (event, arg) => {
   logAndSendToWebConsole(process.platform, event);
 
   event.reply("getPlatformResponse", {
-    platform: process.platform
+    platform: process.platform,
   });
 });
 
@@ -59,14 +83,14 @@ ipcMain.on("getTemplates", (event, arg) => {
   // TODO: filter only directories
   const templates = fs
     .readdirSync(path.join(config.ofPath, "scripts/templates"), {
-      withFileTypes: true
+      withFileTypes: true,
     })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name);
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
 
   logAndSendToWebConsole(JSON.stringify(templates), event);
 
   event.reply("getTemplatesResponse", {
-    templates
+    templates,
   });
 });

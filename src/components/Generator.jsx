@@ -6,9 +6,17 @@ import store from "../state/store";
 
 export default () => {
   const cwd = useSelector((state) => state.project.cwd);
-  const config = useSelector((state) => state.config);
+  const frontendConfig = useSelector((state) => state.config);
+  const cliConfig = useSelector((state) => state.cliConfig);
   const platforms = useSelector((state) => state.platforms.selected);
   const templates = useSelector((state) => state.templates.selected);
+
+  const config = {
+    ...frontendConfig,
+    ...cliConfig,
+  };
+
+  console.log(config);
 
   return (
     <Grid container alignItems="flex-start" justify="flex-end">

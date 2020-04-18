@@ -2,32 +2,32 @@ const { ipcMain } = require("electron");
 const { execSync } = require("child_process");
 const { logAndSendToWebConsole } = require("./utils");
 
-const getVersion = values => {
+const getVersion = (values) => {
   const { config } = values;
   return {
-    type: "GETVERSION"
+    type: "GETVERSION",
   };
 };
-const getAvailablePackages = values => {
+const getAvailablePackages = (values) => {
   const { config } = values;
   return {
     type: "GETAVAILABLEPACKAGES",
     payload: {
-      config
-    }
+      config,
+    },
   };
 };
-const install = values => {
+const install = (values) => {
   const { config } = values;
   return {
     type: "INSTALL",
     payload: {
       config,
-      cwd: values.cwd
-    }
+      cwd: values.cwd,
+    },
   };
 };
-const installPackageById = values => {
+const installPackageById = (values) => {
   const { config } = values;
   return {
     type: "INSTALLPACKAGEBYID",
@@ -37,12 +37,12 @@ const installPackageById = values => {
         typeof values.checkout == "undefined" ? "latest" : values.checkout,
       destination: config.localAddonsPath,
       config,
-      cwd: values.cwd
-    }
+      cwd: values.cwd,
+    },
   };
 };
 
-const installPackageByGithub = values => {
+const installPackageByGithub = (values) => {
   const { config } = values;
   return {
     type: "INSTALLPACKAGEBYGITHUB",
@@ -52,12 +52,12 @@ const installPackageByGithub = values => {
         typeof values.checkout == "undefined" ? "latest" : values.checkout,
       destination: config.localAddonsPath,
       config,
-      cwd: values.cwd
-    }
+      cwd: values.cwd,
+    },
   };
 };
 
-const installPackageByUrl = values => {
+const installPackageByUrl = (values) => {
   const { config } = values;
   return {
     type: "INSTALLPACKAGEBYURL",
@@ -67,40 +67,40 @@ const installPackageByUrl = values => {
       checkout:
         typeof values.checkout == "undefined" ? "latest" : values.checkout,
       destination: config.localAddonsPath,
-      cwd: values.cwd
-    }
+      cwd: values.cwd,
+    },
   };
 };
 
-const getCoreAddons = values => {
+const getCoreAddons = (values) => {
   const { config } = values;
   return {
     type: "GETCOREADDONS",
     payload: {
-      config
-    }
+      config,
+    },
   };
 };
-const getGloballyInstalledPackages = values => {
+const getGloballyInstalledPackages = (values) => {
   const { config } = values;
   return {
     type: "GETGLOBALLYINSTALLEDPACKAGES",
     payload: {
-      config
-    }
+      config,
+    },
   };
 };
-const getLocallyInstalledPackages = values => {
+const getLocallyInstalledPackages = (values) => {
   const { config } = values;
   return {
     type: "GETLOCALLYINSTALLEDPACKAGES",
     payload: {
       config,
-      cwd: values.cwd
-    }
+      cwd: values.cwd,
+    },
   };
 };
-const addPackageToAddonsMakeFile = values => {
+const addPackageToAddonsMakeFile = (values) => {
   const { config } = values;
   return {
     type: "ADDPACKAGETOADDONSMAKEFILE",
@@ -108,21 +108,21 @@ const addPackageToAddonsMakeFile = values => {
       package: {
         url: values.url,
         path: values.path,
-        checkout: values.checkout
+        checkout: values.checkout,
       },
       config,
-      cwd: values.cwd
-    }
+      cwd: values.cwd,
+    },
   };
 };
-const getPackagesListedInAddonsMake = values => {
+const getPackagesListedInAddonsMake = (values) => {
   const { config } = values;
   return {
     type: "GETPACKAGESLISTEDINADDONSMAKE",
     payload: {
       config,
-      cwd: values.cwd
-    }
+      cwd: values.cwd,
+    },
   };
 };
 
@@ -142,11 +142,11 @@ const packageManager = (config, command) => {
   }
 };
 
-ipcMain.on("getVersion", (event, arg) => {
+ipcMain.on("getCliVersion", (event, arg) => {
   logAndSendToWebConsole("getting version", event);
   const { config } = arg;
   const response = packageManager(config, getVersion(arg));
-  event.reply("getVersionResponse", response);
+  event.reply("getCliVersionResponse", response);
   logAndSendToWebConsole(JSON.stringify(response, {}, 4), event);
 });
 
@@ -207,6 +207,7 @@ ipcMain.on("installPackageByUrl", (event, arg) => {
 });
 ipcMain.on("getCoreAddons", (event, arg) => {
   const { config } = arg;
+  console.log("get core addons", config);
   const response = packageManager(config, getCoreAddons(arg));
   event.reply("getCoreAddonsResponse", response);
 });

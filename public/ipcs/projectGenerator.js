@@ -11,10 +11,13 @@ ipcMain.on("createProject", (event, arg) => {
   let response;
   if (process.platform == "win32") {
     response = execSync(
-      `${config.pgPath} /ofPath"${config.ofPath}" ${arg.path}`
+      `${config.ofProjectGeneratorPath} /ofPath"${config.ofPath}" ${arg.path}`
     );
   } else {
-    response = execSync(`${config.pgPath} -o"${config.ofPath}" ${arg.path}`);
+    console.log("config", config);
+    response = execSync(
+      `${config.ofProjectGeneratorPath} -o"${config.ofPath}" ${arg.path}`
+    );
   }
   logAndSendToWebConsole(response.toString(), event);
   event.reply("createProjectResponse", { success: true });
@@ -28,11 +31,11 @@ ipcMain.on("updateProject", (event, arg) => {
   let response;
 
   if (process.platform == "win32") {
-    const command = `${config.pgPath} /ofPath"${config.ofPath}" /dryRun ${arg.path}`;
+    const command = `${config.ofProjectGeneratorPath} /ofPath"${config.ofPath}" /dryRun ${arg.path}`;
     logAndSendToWebConsole(command, event);
     response = execSync(command);
   } else {
-    const command = `${config.pgPath} -o"${config.ofPath}" -a"${packagesList}" -p"${platforms}" -t"${templates}" ${arg.path}`;
+    const command = `${config.ofProjectGeneratorPath} -o"${config.ofPath}" -a"${packagesList}" -p"${platforms}" -t"${templates}" ${arg.path}`;
     logAndSendToWebConsole(command, event);
     response = execSync(command);
   }
@@ -49,13 +52,13 @@ ipcMain.on("updateMultiple", (event, arg) => {
 
   if (process.platform == "win32") {
     response = execSync(
-      `${config.pgPath} /ofPath"${config.ofPath}" /r ${
+      `${config.ofProjectGeneratorPath} /ofPath"${config.ofPath}" /r ${
         arg.verboseOutput ? " /verbose " : " "
       } ${arg.path}`
     );
   } else {
     response = execSync(
-      `${config.pgPath} -o"${config.ofPath}" -r ${
+      `${config.ofProjectGeneratorPath} -o"${config.ofPath}" -r ${
         arg.verboseOutput ? " -v " : " "
       } ${arg.path}`
     );

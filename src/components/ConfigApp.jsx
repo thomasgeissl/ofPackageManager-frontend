@@ -15,8 +15,7 @@ import {
   setOfPath,
   setDefaultProjectPath,
   setOfPackageManagerPath,
-  setOfPackagesPath,
-  setProjectGeneratorPath
+  setProjectGeneratorPath,
 } from "../state/reducers/config";
 const { dialog } = require("electron").remote;
 const Container = styled.div`
@@ -35,20 +34,21 @@ const FirstPathLi = styled.li`
 `;
 export default () => {
   const showAdvancedFeatures = useSelector(
-    state => state.config.showAdvancedFeatures
+    (state) => state.config.showAdvancedFeatures
   );
-  const config = useSelector(state => state.config);
-  const showConsole = useSelector(state => state.config.showConsole);
-  const verboseOutput = useSelector(state => state.config.verboseOutput);
-  const ofPath = useSelector(state => state.config.ofPath);
+  const config = useSelector((state) => state.config);
+  const showConsole = useSelector((state) => state.config.showConsole);
+  const verboseOutput = useSelector((state) => state.config.verboseOutput);
+  const ofPath = useSelector((state) => state.cliConfig.ofPath);
   const defaultProjectPath = useSelector(
-    state => state.config.defaultProjectPath
+    (state) => state.config.defaultProjectPath
   );
   const ofPackageManagerPath = useSelector(
-    state => state.config.ofPackageManagerPath
+    (state) => state.config.ofPackageManagerPath
   );
-  const packagesPath = useSelector(state => state.config.packagesPath);
-  const pgPath = useSelector(state => state.config.pgPath);
+  const ofProjectGeneratorPath = useSelector(
+    (state) => state.config.ofProjectGeneratorPath
+  );
   const dispatch = useDispatch();
   return (
     <Container>
@@ -102,21 +102,21 @@ export default () => {
           <TextField
             label="openFrameworks path"
             value={ofPath}
-            onChange={event => {}}
-            onKeyPress={event => {}}
-            onClick={event => {
+            onChange={(event) => {}}
+            onKeyPress={(event) => {}}
+            onClick={(event) => {
               dialog
                 .showOpenDialog({
                   // defaultPath: defaultProjectPath,
-                  properties: ["openDirectory"]
+                  properties: ["openDirectory"],
                 })
-                .then(result => {
+                .then((result) => {
                   if (result.filePaths.length) {
                     //   setLocation(result.filePaths[0]);
                     dispatch(setOfPath(result.filePaths[0]));
                   }
                 })
-                .catch(err => {
+                .catch((err) => {
                   console.log(err);
                 });
             }}
@@ -127,20 +127,20 @@ export default () => {
           <TextField
             label="default project path"
             value={defaultProjectPath}
-            onChange={event => {}}
-            onKeyPress={event => {}}
-            onClick={event => {
+            onChange={(event) => {}}
+            onKeyPress={(event) => {}}
+            onClick={(event) => {
               dialog
                 .showOpenDialog({
                   // defaultPath: defaultProjectPath,
-                  properties: ["openDirectory"]
+                  properties: ["openDirectory"],
                 })
-                .then(result => {
+                .then((result) => {
                   if (result.filePaths.length) {
                     dispatch(setDefaultProjectPath(result.filePaths[0]));
                   }
                 })
-                .catch(err => {
+                .catch((err) => {
                   console.log(err);
                 });
             }}
@@ -151,21 +151,21 @@ export default () => {
           <TextField
             label="ofPackageManager path"
             value={ofPackageManagerPath}
-            onChange={event => {}}
-            onKeyPress={event => {}}
-            onClick={event => {
+            onChange={(event) => {}}
+            onKeyPress={(event) => {}}
+            onClick={(event) => {
               dialog
                 .showOpenDialog({
                   // defaultPath: defaultProjectPath,
-                  properties: ["openFile"]
+                  properties: ["openFile"],
                 })
-                .then(result => {
+                .then((result) => {
                   if (result.filePaths.length) {
                     //   setLocation(result.filePaths[0]);
                     dispatch(setOfPackageManagerPath(result.filePaths[0]));
                   }
                 })
-                .catch(err => {
+                .catch((err) => {
                   console.log(err);
                 });
             }}
@@ -174,47 +174,22 @@ export default () => {
         </li>
         <li>
           <TextField
-            label="packages database path"
-            value={packagesPath}
-            onChange={event => {}}
-            onKeyPress={event => {}}
-            onClick={event => {
+            label="ofProjectGenerator path"
+            value={ofProjectGeneratorPath}
+            onChange={(event) => {}}
+            onKeyPress={(event) => {}}
+            onClick={(event) => {
               dialog
                 .showOpenDialog({
                   // defaultPath: defaultProjectPath,
-                  properties: ["openDirectory"]
+                  properties: ["openFile"],
                 })
-                .then(result => {
-                  if (result.filePaths.length) {
-                    //   setLocation(result.filePaths[0]);
-                    dispatch(setOfPackagesPath(result.filePaths[0]));
-                  }
-                })
-                .catch(err => {
-                  console.log(err);
-                });
-            }}
-            fullWidth
-          />
-        </li>
-        <li>
-          <TextField
-            label="projectGenerator path"
-            value={pgPath}
-            onChange={event => {}}
-            onKeyPress={event => {}}
-            onClick={event => {
-              dialog
-                .showOpenDialog({
-                  // defaultPath: defaultProjectPath,
-                  properties: ["openFile"]
-                })
-                .then(result => {
+                .then((result) => {
                   if (result.filePaths.length) {
                     dispatch(setProjectGeneratorPath(result.filePaths[0]));
                   }
                 })
-                .catch(err => {
+                .catch((err) => {
                   console.log(err);
                 });
             }}
@@ -227,14 +202,10 @@ export default () => {
           <Button
             color="primary"
             variant="contained"
-            onClick={event => {
-              ipcRenderer.send("writeJsonFile", {
-                path: "assets/config.json",
-                content: { ...config }
+            onClick={(event) => {
+              ipcRenderer.send("saveFrontendConfig", {
+                content: { ...config },
               });
-              // ipcRenderer.send("removeAddonsMakeFile", {
-              //   cwd
-              // });
             }}
           >
             save

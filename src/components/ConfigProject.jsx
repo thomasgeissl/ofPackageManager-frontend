@@ -38,7 +38,13 @@ const StyledBox = styled(Box)`
 
 export default () => {
   const cwd = useSelector((state) => state.project.cwd);
-  const config = useSelector((state) => state.config);
+  const cliConfig = useSelector((state) => state.cliConfig);
+  const frontendConfig = useSelector((state) => state.config);
+  const config = {
+    ...cliConfig,
+    ...frontendConfig,
+  };
+  console.log("config proejcte, config", config, cliConfig, frontendConfig);
   const locallyInstalledPackages = useSelector(
     (state) => state.localPackages.packages
   );
@@ -53,6 +59,7 @@ export default () => {
           Select or install addons{" "}
           <RefreshButton
             onClick={(event) => {
+              console.log("configg!!!!!", config);
               ipcRenderer.send("getCoreAddons", { config });
               ipcRenderer.send("getGloballyInstalledPackages", { config });
               ipcRenderer.send("getLocallyInstalledPackages", {

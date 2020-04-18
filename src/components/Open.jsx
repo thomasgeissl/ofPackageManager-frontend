@@ -7,17 +7,22 @@ const { dialog } = require("electron").remote;
 
 export default () => {
   const dispatch = useDispatch();
-  const config = useSelector(state => state.config);
+  const cliConfig = useSelector((state) => state.cliConfig);
+  const frontendConfig = useSelector((state) => state.config);
+  const config = {
+    ...cliConfig,
+    ...frontendConfig,
+  };
   const defaultProjectPath = useSelector(
-    state => state.config.defaultProjectPath
+    (state) => state.config.defaultProjectPath
   );
   const history = useHistory();
   dialog
     .showOpenDialog({
       defaultPath: defaultProjectPath,
-      properties: ["openDirectory"]
+      properties: ["openDirectory"],
     })
-    .then(result => {
+    .then((result) => {
       if (result.canceled) {
         history.push("/");
       } else {
@@ -29,7 +34,7 @@ export default () => {
           ipcRenderer.send("getGloballyInstalledPackages", { config });
           ipcRenderer.send("getLocallyInstalledPackages", {
             config,
-            cwd
+            cwd,
           });
           ipcRenderer.send("getAvailablePackages", { config });
           ipcRenderer.send("getPackagesListedInAddonsMake", { config, cwd });
@@ -38,7 +43,7 @@ export default () => {
         }
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
   return <></>;

@@ -6,7 +6,12 @@ import PackageList from "./PackageList";
 import InstallButton from "./buttons/Install";
 
 export default () => {
-  const config = useSelector((state) => state.config);
+  const cliConfig = useSelector((state) => state.cliConfig);
+  const frontendConfig = useSelector((state) => state.config);
+  const config = {
+    ...cliConfig,
+    frontendConfig,
+  };
   const cwd = useSelector((state) => state.project.cwd);
   const localPackages = useSelector((state) => state.localPackages.packages);
   const globalPackages = useSelector(

@@ -1,14 +1,15 @@
+import { ipcRenderer } from "electron";
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { ipcRenderer } from "electron";
 import store from "./state/store";
 import { appendOutput } from "./state/reducers/console";
 import { showNotification } from "./state/reducers/notification";
-import { setOfPackageManagerVersion } from "./state/reducers/meta";
+import { setOfPackageManagerCliVersion } from "./state/reducers/meta";
 import { setConfig } from "./state/reducers/config";
+import { setCliConfig } from "./state/reducers/cliConfig";
 import {
   setAvailableCoreAddons,
   addCoreAddon,
@@ -31,14 +32,19 @@ import {
 ReactDOM.render(<App />, document.getElementById("root"));
 serviceWorker.unregister();
 
-ipcRenderer.on("readJsonFileResponse", (event, arg) => {
-  store.dispatch(setConfig(arg.content));
-  ipcRenderer.send("getVersion", { config: arg.content });
-  ipcRenderer.send("getTemplates", { config: arg.content });
+ipcRenderer.on("getFrontendConfigResponse", (event, arg) => {
+  store.dispatch(setConfig(arg));
+  ipcRenderer.send("getCliConfig", {});
 });
-ipcRenderer.on("getVersionResponse", (event, arg) => {
+ipcRenderer.on("getCliConfigResponse", (event, arg) => {
+  store.dispatch(setCliConfig(arg));
+  ipcRenderer.send("getCliVersion", { config: store.getState().config });
+  // ipcRenderer.send("getTemplates", { config: store.getState().config });
+});
+ipcRenderer.on("getCliVersionResponse", (event, arg) => {
+  console.log("get cli version response");
   if (arg.success) {
-    store.dispatch(setOfPackageManagerVersion(arg.payload));
+    store.dispatch(setOfPackageManagerCliVersion(arg.payload));
   }
 });
 
@@ -114,5 +120,7 @@ ipcRenderer.on("getTemplatesResponse", (event, arg) => {
   store.dispatch(setAvailableTemplates(arg.templates));
 });
 
-ipcRenderer.send("readJsonFile", { path: "assets/config.json" });
-ipcRenderer.send("getPlatform", {});
+ipcRenderer.on("inited", (event, arg) => {
+  ipcRenderer.send("getFrontendConfig", {});
+  // ipcRenderer.send("getPlatform", {});
+});
