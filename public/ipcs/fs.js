@@ -4,7 +4,9 @@ const fs = require("fs");
 const path = require("path");
 const { logAndSendToWebConsole } = require("./utils.js");
 
-const home = os.homedir();
+const homePath = os.homedir();
+const configDirPath = path.join(homePath, ".ofPackageManager");
+const historyPath = path.join(configDirPath, "frontend.history.json");
 
 ipcMain.on("doesDirectoryExist", (event, arg) => {
   event.reply("doesDirectoryExistResponse", {
@@ -109,4 +111,34 @@ ipcMain.on("getTemplates", (event, arg) => {
   event.reply("getTemplatesResponse", {
     templates,
   });
+});
+
+ipcMain.on("getHistory", (event, arg) => {
+  logAndSendToWebConsole("getting history", event);
+  try {
+    let history = JSON.parse(fs.readFileSync(historyPath));
+    logAndSendToWebConsole(JSON.stringify(history), event);
+
+    event.reply("getHistoryResponse", {
+      history,
+    });
+  } catch (e) {
+
+  }
+});
+
+ipcMain.on("addToHistory", (event, arg) => {
+  logAndSendToWebConsole("adding to history", event);
+  try {
+    let history = JSON.parse(fs.readFileSync(historyPath));
+    history.projects.push(arg)
+    console.log(history)
+    fs.writeFileSync(historyPath, JSON.stringify(history, {}, 2))
+
+    // logAndSendToWebConsole(JSON.stringify(templates), event);
+
+  } catch (e) {
+    console.log("error fs operation", e)
+
+  }
 });

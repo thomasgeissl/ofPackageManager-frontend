@@ -30,6 +30,8 @@ export default () => {
   const showAdvancedFeatures = useSelector(
     (state) => state.config.showAdvancedFeatures
   );
+  const projectHistory = useSelector(state => state.meta.history)
+  console.log(projectHistory)
 
   return (
     <Container>

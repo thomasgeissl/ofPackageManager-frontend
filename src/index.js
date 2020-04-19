@@ -10,7 +10,7 @@ import { showNotification } from "./state/reducers/notification";
 import { setOfPackageManagerCliVersion } from "./state/reducers/meta";
 import { setConfig } from "./state/reducers/config";
 import { setCliConfig } from "./state/reducers/cliConfig";
-import { setFoundCliConfig } from "./state/reducers/meta";
+import { setFoundCliConfig, setHistory } from "./state/reducers/meta";
 import {
   setAvailableCoreAddons,
   addCoreAddon,
@@ -124,8 +124,12 @@ ipcRenderer.on("getPlatformResponse", (event, arg) => {
 ipcRenderer.on("getTemplatesResponse", (event, arg) => {
   store.dispatch(setAvailableTemplates(arg.templates));
 });
+ipcRenderer.on("getHistoryResponse", (event, arg) => {
+  store.dispatch(setHistory(arg.history));
+});
 
 ipcRenderer.on("inited", (event, arg) => {
   ipcRenderer.send("getFrontendConfig", {});
   ipcRenderer.send("getPlatform", {});
+  ipcRenderer.send("getHistory", {});
 });

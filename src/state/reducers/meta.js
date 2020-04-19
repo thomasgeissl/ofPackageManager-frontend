@@ -5,11 +5,13 @@ const initialState = {
     minor: -1,
     patch: -1,
   },
+  history: []
 };
 
 const types = {
   SETFOUNDCLICONFIG: "SETFOUNDCLICONFIG",
   SETOFPACKAGEMANAGERCLIVERSION: "SETOFPACKAGEMANAGERCLIVERSION",
+  SETHISTORY: "SETHISTORY"
 };
 
 export default (state = initialState, action) => {
@@ -23,6 +25,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         ofPackageManagerCliVersion: action.payload.value,
+      };
+    case types.SETHISTORY:
+      return {
+        ...state,
+        history: action.payload.value,
       };
     default:
       return state;
@@ -40,6 +47,14 @@ export const setOfPackageManagerCliVersion = (value) => {
 export const setFoundCliConfig = (value) => {
   return {
     type: types.SETFOUNDCLICONFIG,
+    payload: {
+      value,
+    },
+  };
+};
+export const setHistory = (value) => {
+  return {
+    type: types.SETHISTORY,
     payload: {
       value,
     },

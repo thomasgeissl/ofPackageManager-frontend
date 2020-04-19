@@ -19,7 +19,7 @@ const Actions = styled(Grid)`
   margin-top: 25px;
 `;
 
-let doesDirectoryExistResponseCallback = (event, arg) => {};
+let doesDirectoryExistResponseCallback = (event, arg) => { };
 
 ipcRenderer.on("doesDirectoryExistResponse", (event, arg) => {
   doesDirectoryExistResponseCallback(event, arg);
@@ -56,8 +56,8 @@ export default () => {
         <TextField
           label="location"
           value={location}
-          onChange={(event) => {}}
-          onKeyPress={(event) => {}}
+          onChange={(event) => { }}
+          onKeyPress={(event) => { }}
           onClick={(event) => {
             dialog
               .showOpenDialog({
@@ -85,7 +85,7 @@ export default () => {
               name: event.target.value,
             });
           }}
-          onKeyPress={(event) => {}}
+          onKeyPress={(event) => { }}
           fullWidth
         />
         <Actions container alignItems="flex-start" justify="flex-end">
@@ -94,6 +94,9 @@ export default () => {
               variant="contained"
               disabled={!valid}
               onClick={(event) => {
+                ipcRenderer.send("addToHistory", {
+                  path: cwd
+                });
                 //   ipcRenderer.send("createDirectory", { path: cwd });
                 ipcRenderer.send("createProject", { config, path: cwd });
                 ipcRenderer.send("getCoreAddons", { config });

@@ -29,6 +29,9 @@ export default () => {
         if (result.filePaths.length) {
           const cwd = result.filePaths[0];
           dispatch(setCwdCreator(cwd));
+          ipcRenderer.send("addToHistory", {
+            path: cwd
+          });
 
           ipcRenderer.send("getCoreAddons", { config });
           ipcRenderer.send("getGloballyInstalledPackages", { config });
