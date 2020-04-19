@@ -22,6 +22,7 @@ brew install ofprojectgenerator
 - install node: `brew install node`
 - install yarn globally: `npm install -g yarn`
 - install dependencies: `yarn install`
-- change paths in `public/assets/config.json`
 - run in dev mode: `yarn electron-dev`
 - finally build for osx, win, linux: `yarn electron-dist`
+
+small changes in the scripts might be needed to make it build on windows or linux.
