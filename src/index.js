@@ -10,6 +10,7 @@ import { showNotification } from "./state/reducers/notification";
 import { setOfPackageManagerCliVersion } from "./state/reducers/meta";
 import { setConfig } from "./state/reducers/config";
 import { setCliConfig } from "./state/reducers/cliConfig";
+import { setFoundCliConfig } from "./state/reducers/meta";
 import {
   setAvailableCoreAddons,
   addCoreAddon,
@@ -38,11 +39,15 @@ ipcRenderer.on("getFrontendConfigResponse", (event, arg) => {
 });
 ipcRenderer.on("getCliConfigResponse", (event, arg) => {
   store.dispatch(setCliConfig(arg));
-  ipcRenderer.send("getCliVersion", { config: store.getState().config });
-  // ipcRenderer.send("getTemplates", { config: store.getState().config });
+  store.dispatch(setFoundCliConfig(true));
+  const config = {
+    ...store.getState().cliConfig,
+    ...store.getState().config,
+  };
+  ipcRenderer.send("getCliVersion", { config });
+  ipcRenderer.send("getTemplates", { config });
 });
 ipcRenderer.on("getCliVersionResponse", (event, arg) => {
-  console.log("get cli version response");
   if (arg.success) {
     store.dispatch(setOfPackageManagerCliVersion(arg.payload));
   }
@@ -122,5 +127,5 @@ ipcRenderer.on("getTemplatesResponse", (event, arg) => {
 
 ipcRenderer.on("inited", (event, arg) => {
   ipcRenderer.send("getFrontendConfig", {});
-  // ipcRenderer.send("getPlatform", {});
+  ipcRenderer.send("getPlatform", {});
 });

@@ -3,6 +3,15 @@
 ## Description
 
 electron frontend for [ofPackageManager](https://github.com/thomasgeissl/ofPackageManager).
+It uses ofPackageManager and ofProjectGenerator under the hood.
+
+```sh
+brew tap thomasgeissl/tools
+brew install ofpackagemanager
+brew install ofprojectgenerator
+#brew upgrade ofpackagemanager
+#brew upgrade ofprojectgenerator
+```
 
 ## Build status
 

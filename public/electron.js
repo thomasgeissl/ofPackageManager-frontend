@@ -75,10 +75,13 @@ const init = () => {
       console.log(
         path.join(os.homedir(), ".ofPackageManager/frontend.config.json")
       );
-      fs.writeFileSync(
-        frontendConfigPath,
-        JSON.stringify(frontendConfig, {}, 2)
-      );
+
+      if (isOfPackageManagerInstalled && isOfProjectGeneratorInstalled) {
+        fs.writeFileSync(
+          frontendConfigPath,
+          JSON.stringify(frontendConfig, {}, 2)
+        );
+      }
     }
 
     mainWindow.webContents.send("inited", {});

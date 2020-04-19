@@ -127,6 +127,12 @@ const getPackagesListedInAddonsMake = (values) => {
 };
 
 const packageManager = (config, command) => {
+  if (config.ofPackageManagerPath === "") {
+    return {
+      success: false,
+      errors: ["ofPackageManagerPath not set"],
+    };
+  }
   const rawResponse = execSync(
     `${config.ofPackageManagerPath} "${JSON.stringify(command).replace(
       /\\([\s\S])|(")/g,

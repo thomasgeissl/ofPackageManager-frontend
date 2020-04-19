@@ -19,10 +19,25 @@ export default () => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        ofPackageManager CLI
-      </a>{" "}
-      version: {version.major}.{version.minor}.{version.patch}, frontend
-      version: {frontendVersion}
+        cli
+      </a>
+      @{version.major}.{version.minor}.{version.patch},{" "}
+      <a
+        href="https://github.com/thomasgeissl/ofPackageManager-frontend"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        frontend
+      </a>
+      @{frontendVersion},{" "}
+      <a
+        href="https://github.com/openframeworks/projectGenerator"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ofProjectGenerator
+      </a>
+      @n/a
     </Container>
   );
 };

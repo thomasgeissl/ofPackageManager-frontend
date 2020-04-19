@@ -12,7 +12,6 @@ import {
   setShowAdvancedFeatures,
   setShowConsole,
   setVerboseOutput,
-  setOfPath,
   setDefaultProjectPath,
   setOfPackageManagerPath,
   setProjectGeneratorPath,
@@ -22,7 +21,7 @@ const Container = styled.div`
   background-color: white;
   position: relative;
   width: 50%;
-  height: 50%;
+  height: 45%;
   padding: 15px;
   overflow: auto;
 `;
@@ -36,7 +35,12 @@ export default () => {
   const showAdvancedFeatures = useSelector(
     (state) => state.config.showAdvancedFeatures
   );
-  const config = useSelector((state) => state.config);
+  const cliConfig = useSelector((state) => state.cliConfig);
+  const frontendConfig = useSelector((state) => state.config);
+  const config = {
+    ...cliConfig,
+    ...frontendConfig,
+  };
   const showConsole = useSelector((state) => state.config.showConsole);
   const verboseOutput = useSelector((state) => state.config.verboseOutput);
   const ofPath = useSelector((state) => state.cliConfig.ofPath);
@@ -50,6 +54,13 @@ export default () => {
     (state) => state.config.ofProjectGeneratorPath
   );
   const dispatch = useDispatch();
+
+  const saveAndReload = () => {
+    ipcRenderer.send("saveFrontendConfig", {
+      content: { ...frontendConfig },
+    });
+    ipcRenderer.send("getCliVersion", { config });
+  };
   return (
     <Container>
       <List>
@@ -102,24 +113,7 @@ export default () => {
           <TextField
             label="openFrameworks path"
             value={ofPath}
-            onChange={(event) => {}}
-            onKeyPress={(event) => {}}
-            onClick={(event) => {
-              dialog
-                .showOpenDialog({
-                  // defaultPath: defaultProjectPath,
-                  properties: ["openDirectory"],
-                })
-                .then((result) => {
-                  if (result.filePaths.length) {
-                    //   setLocation(result.filePaths[0]);
-                    dispatch(setOfPath(result.filePaths[0]));
-                  }
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            }}
+            disabled={true}
             fullWidth
           />
         </FirstPathLi>
@@ -199,15 +193,7 @@ export default () => {
       </List>
       <Grid container alignItems="flex-start" justify="flex-end">
         <Grid item>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={(event) => {
-              ipcRenderer.send("saveFrontendConfig", {
-                content: { ...config },
-              });
-            }}
-          >
+          <Button color="primary" variant="contained" onClick={saveAndReload()}>
             save
           </Button>
         </Grid>

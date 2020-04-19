@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import Console from "./components/Console";
 import ConfigApp from "./components/ConfigApp";
 import Notification from "./components/Notification";
+import ConfigMessage from "./components/ConfigMessage";
 import styled from "styled-components";
 
 const StyledApp = styled.div`
@@ -45,12 +46,12 @@ const ConfigButton = styled(Button)`
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#E71B74"
-    }
+      main: "#E71B74",
+    },
   },
   status: {
-    danger: "orange"
-  }
+    danger: "orange",
+  },
 });
 
 function App() {
@@ -61,7 +62,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <StyledContent>
             <ConfigButton
-              onClick={event => {
+              onClick={(event) => {
                 setConfigModalOpen(true);
               }}
             >
@@ -91,13 +92,14 @@ function App() {
           <Footer></Footer>
           <StyledModal
             open={configModalOpen}
-            onClose={event => {
+            onClose={(event) => {
               setConfigModalOpen(false);
             }}
           >
             <ConfigApp></ConfigApp>
           </StyledModal>
           <Notification></Notification>
+          <ConfigMessage></ConfigMessage>
         </ThemeProvider>
       </StoreProvider>
     </StyledApp>

@@ -47,11 +47,19 @@ ipcMain.on("readJsonFile", (event, arg) => {
 });
 
 ipcMain.on("getFrontendConfig", (event, arg) => {
-  const rawdata = fs.readFileSync(
-    path.join(os.homedir(), ".ofPackageManager/frontend.config.json")
+  const configPath = path.join(
+    os.homedir(),
+    ".ofPackageManager/frontend.config.json"
   );
-  const data = JSON.parse(rawdata);
-  event.reply("getFrontendConfigResponse", data);
+  try {
+    if (fs.existsSync(configPath)) {
+      const rawdata = fs.readFileSync(configPath);
+      const data = JSON.parse(rawdata);
+      event.reply("getFrontendConfigResponse", data);
+    }
+  } catch (err) {
+    console.error(err);
+  }
 });
 ipcMain.on("saveFrontendConfig", (event, arg) => {
   fs.writeFileSync(
@@ -60,11 +68,19 @@ ipcMain.on("saveFrontendConfig", (event, arg) => {
   );
 });
 ipcMain.on("getCliConfig", (event, arg) => {
-  const rawdata = fs.readFileSync(
-    path.join(os.homedir(), ".ofPackageManager/cli.config.json")
+  const configPath = path.join(
+    os.homedir(),
+    ".ofPackageManager/cli.config.json"
   );
-  const data = JSON.parse(rawdata);
-  event.reply("getCliConfigResponse", data);
+  try {
+    if (fs.existsSync(configPath)) {
+      const rawdata = fs.readFileSync(configPath);
+      const data = JSON.parse(rawdata);
+      event.reply("getCliConfigResponse", data);
+    }
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 ipcMain.on("getPlatform", (event, arg) => {
