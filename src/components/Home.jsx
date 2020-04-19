@@ -9,16 +9,13 @@ import { clearGlobalPackages } from "../state/reducers/globalPackages";
 import { clearLocalPackages } from "../state/reducers/localPackages";
 import { clearProject } from "../state/reducers/project";
 
+import RecentProjects from "./RecentProjects";
+import CliInfo from "./CliInfo";
+
 const Container = styled.div`
   padding: 100px;
 `;
 
-const StyledCliSection = styled.section`
-  margin-top: 100px;
-  margin-bottom: 50px;
-  font-size: 1.25em;
-  text-align: left;
-`;
 const StyledButton = styled(Button)`
   width: 200px;
   height: 100px;
@@ -30,8 +27,6 @@ export default () => {
   const showAdvancedFeatures = useSelector(
     (state) => state.config.showAdvancedFeatures
   );
-  const projectHistory = useSelector(state => state.meta.history)
-  console.log(projectHistory)
 
   return (
     <Container>
@@ -90,19 +85,8 @@ export default () => {
           </Grid>
         )}
       </Grid>
-      <StyledCliSection>
-        By the way, <br></br>
-        there is also a cli version of the package manager available.<br></br>
-        Feel free to check out its{" "}
-        <a
-          href="https://thomasgeissl.github.io/ofPackageManager/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          website
-        </a>
-        .
-      </StyledCliSection>
+      <RecentProjects></RecentProjects>
+      <CliInfo></CliInfo>
     </Container>
   );
 };

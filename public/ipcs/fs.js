@@ -117,28 +117,28 @@ ipcMain.on("getHistory", (event, arg) => {
   logAndSendToWebConsole("getting history", event);
   try {
     let history = JSON.parse(fs.readFileSync(historyPath));
-    logAndSendToWebConsole(JSON.stringify(history), event);
+    logAndSendToWebConsole(JSON.stringify(history.projects), event);
 
     event.reply("getHistoryResponse", {
-      history,
+      history: history.projects,
     });
-  } catch (e) {
-
-  }
+  } catch (e) {}
 });
 
 ipcMain.on("addToHistory", (event, arg) => {
   logAndSendToWebConsole("adding to history", event);
   try {
     let history = JSON.parse(fs.readFileSync(historyPath));
-    history.projects.push(arg)
-    console.log(history)
-    fs.writeFileSync(historyPath, JSON.stringify(history, {}, 2))
+    history.projects.unshift(arg);
+    // TODO: remove duplicates
+    history.projects = history.projects.slice(0, 10);
+    fs.writeFileSync(historyPath, JSON.stringify(history, {}, 2));
+    event.reply("getHistoryResponse", {
+      history: history.projects,
+    });
 
     // logAndSendToWebConsole(JSON.stringify(templates), event);
-
   } catch (e) {
-    console.log("error fs operation", e)
-
+    console.log("error fs operation", e);
   }
 });
