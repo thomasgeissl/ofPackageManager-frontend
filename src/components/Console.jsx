@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -16,25 +16,28 @@ const Console = styled.div`
 export default () => {
   const output = useSelector((state) => state.console.output);
   const showConsole = useSelector((state) => state.config.showConsole);
-  const consoleRef = useRef(null);
-  if (consoleRef.current) {
-    window.scrollTo(0, consoleRef.current.scrollHeight);
-  }
+  const endRef = useRef(null);
+  useEffect(() => {
+    if (endRef.current) {
+      endRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  });
 
   return (
     <Container>
       {showConsole && (
-        <Console ref={consoleRef}>
+        <Console>
           {output === ""
             ? output
             : output.split("\n").map(function (item, key) {
-                return (
-                  <span key={key}>
-                    {item}
-                    <br />
-                  </span>
-                );
-              })}
+              return (
+                <span key={key}>
+                  {item}
+                  <br />
+                </span>
+              );
+            })}
+          <div ref={endRef} />
         </Console>
       )}
     </Container>
