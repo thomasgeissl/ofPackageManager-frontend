@@ -9,6 +9,7 @@ import { setCwd as setCwdCreator } from "../state/reducers/project";
 import Header from "./Header";
 import styled from "styled-components";
 const { dialog } = require("electron").remote;
+const channels = require("../channels");
 
 const Container = styled.div``;
 const StyledForm = styled.form`
@@ -19,9 +20,9 @@ const Actions = styled(Grid)`
   margin-top: 25px;
 `;
 
-let doesDirectoryExistResponseCallback = (event, arg) => { };
+let doesDirectoryExistResponseCallback = (event, arg) => {};
 
-ipcRenderer.on("doesDirectoryExistResponse", (event, arg) => {
+ipcRenderer.on(channels.DOESDIRECTORYEXISTRESPONSE, (event, arg) => {
   doesDirectoryExistResponseCallback(event, arg);
 });
 
@@ -56,8 +57,8 @@ export default () => {
         <TextField
           label="location"
           value={location}
-          onChange={(event) => { }}
-          onKeyPress={(event) => { }}
+          onChange={(event) => {}}
+          onKeyPress={(event) => {}}
           onClick={(event) => {
             dialog
               .showOpenDialog({
@@ -80,12 +81,12 @@ export default () => {
           value={name}
           onChange={(event) => {
             setName(event.target.value);
-            ipcRenderer.send("doesDirectoryExist", {
+            ipcRenderer.send(channels.DOESDIRECTORYEXIST, {
               location,
               name: event.target.value,
             });
           }}
-          onKeyPress={(event) => { }}
+          onKeyPress={(event) => {}}
           fullWidth
         />
         <Actions container alignItems="flex-start" justify="flex-end">
@@ -94,8 +95,8 @@ export default () => {
               variant="contained"
               disabled={!valid}
               onClick={(event) => {
-                ipcRenderer.send("addToHistory", {
-                  path: cwd
+                ipcRenderer.send(channels.ADDTOHISTORY, {
+                  path: cwd,
                 });
                 //   ipcRenderer.send("createDirectory", { path: cwd });
                 ipcRenderer.send("createProject", { config, path: cwd });

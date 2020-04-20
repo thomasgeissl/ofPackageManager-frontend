@@ -16,7 +16,10 @@ import {
   setOfPackageManagerPath,
   setProjectGeneratorPath,
 } from "../state/reducers/config";
+
 const { dialog } = require("electron").remote;
+const channels = require("../channels");
+
 const Container = styled.div`
   background-color: white;
   position: relative;
@@ -56,7 +59,7 @@ export default () => {
   const dispatch = useDispatch();
 
   const saveAndReload = () => {
-    ipcRenderer.send("saveFrontendConfig", {
+    ipcRenderer.send(channels.WRITEFRONTENDCONFIG, {
       content: { ...frontendConfig },
     });
     ipcRenderer.send("getCliVersion", { config });

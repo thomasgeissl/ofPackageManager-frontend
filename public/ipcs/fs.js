@@ -3,13 +3,14 @@ const os = require("os");
 const fs = require("fs");
 const path = require("path");
 const { logAndSendToWebConsole } = require("./utils.js");
+const channels = require("../../src/channels");
 
 const homePath = os.homedir();
 const configDirPath = path.join(homePath, ".ofPackageManager");
 const historyPath = path.join(configDirPath, "frontend.history.json");
 
-ipcMain.on("doesDirectoryExist", (event, arg) => {
-  event.reply("doesDirectoryExistResponse", {
+ipcMain.on(channels.DOESDIRECTORYEXIST, (event, arg) => {
+  event.reply(channels.DOESDIRECTORYEXISTRESPONSE, {
     path: arg.name ? path.join(arg.location, arg.name) : arg.location,
     value: arg.name
       ? fs.existsSync(path.join(arg.location, arg.name))
@@ -17,38 +18,38 @@ ipcMain.on("doesDirectoryExist", (event, arg) => {
   });
 });
 
-ipcMain.on("createDirectory", (event, arg) => {
+ipcMain.on(channels.CREATEDIRECTORY, (event, arg) => {
   if (!fs.existsSync(arg.path)) {
     fs.mkdirSync(arg.path);
   }
-  event.reply("createDirectoryResponse", { success: true });
+  event.reply(channels.CREATEDIRECTORYRESPOMSE, { success: true });
   // event.reply("doesDirectoryExistResponse", {
   //   path: path.join(arg.location, arg.name),
   //   value: fs.existsSync(path.join(arg.location, arg.name))
   // });
 });
-ipcMain.on("removeAddonsMakeFile", (event, arg) => {
+ipcMain.on(channels.REMOVEADDONSMAKEFILE, (event, arg) => {
   if (fs.existsSync(path.join(arg.cwd, "addons.make"))) {
     fs.unlinkSync(path.join(arg.cwd, "addons.make"));
   }
 });
-ipcMain.on("writeJsonFile", (event, arg) => {
+ipcMain.on(channels.WRITEJSONFILE, (event, arg) => {
   fs.writeFileSync(
     path.join(__dirname, "..", arg.path),
     JSON.stringify(arg.content, {}, 2)
   );
 });
-ipcMain.on("readJsonFile", (event, arg) => {
+ipcMain.on(channels.READJSONFILE, (event, arg) => {
   const rawdata = fs.readFileSync(path.join(__dirname, "..", arg.path));
   const data = JSON.parse(rawdata);
   // console.log(data);
-  event.reply("readJsonFileResponse", {
+  event.reply(channels.READJSONFILERESPONSE, {
     path: arg.path,
     content: data,
   });
 });
 
-ipcMain.on("getFrontendConfig", (event, arg) => {
+ipcMain.on(channels.READFRONTENDCONFIG, (event, arg) => {
   const configPath = path.join(
     os.homedir(),
     ".ofPackageManager/frontend.config.json"
@@ -57,19 +58,19 @@ ipcMain.on("getFrontendConfig", (event, arg) => {
     if (fs.existsSync(configPath)) {
       const rawdata = fs.readFileSync(configPath);
       const data = JSON.parse(rawdata);
-      event.reply("getFrontendConfigResponse", data);
+      event.reply(channels.READFRONTENDCONFIGRESPONSE, data);
     }
   } catch (err) {
     console.error(err);
   }
 });
-ipcMain.on("saveFrontendConfig", (event, arg) => {
+ipcMain.on(channels.WRITEFRONTENDCONFIG, (event, arg) => {
   fs.writeFileSync(
     path.join(os.homedir(), ".ofPackageManager/frontend.config.json"),
     JSON.stringify(arg.content, {}, 2)
   );
 });
-ipcMain.on("getCliConfig", (event, arg) => {
+ipcMain.on(channels.READCLICONFIG, (event, arg) => {
   const configPath = path.join(
     os.homedir(),
     ".ofPackageManager/cli.config.json"
@@ -78,23 +79,23 @@ ipcMain.on("getCliConfig", (event, arg) => {
     if (fs.existsSync(configPath)) {
       const rawdata = fs.readFileSync(configPath);
       const data = JSON.parse(rawdata);
-      event.reply("getCliConfigResponse", data);
+      event.reply(channels.READCLICONFIGRESPONSE, data);
     }
   } catch (err) {
     console.error(err);
   }
 });
 
-ipcMain.on("getPlatform", (event, arg) => {
+ipcMain.on(channels.GETPLATFORM, (event, arg) => {
   logAndSendToWebConsole("getting platform", event);
   logAndSendToWebConsole(process.platform, event);
 
-  event.reply("getPlatformResponse", {
+  event.reply(channels.GETPLATFORMRESPONSE, {
     platform: process.platform,
   });
 });
 
-ipcMain.on("getTemplates", (event, arg) => {
+ipcMain.on(channels.GETTEMPLATES, (event, arg) => {
   logAndSendToWebConsole("getting templates", event);
   const { config } = arg;
 
@@ -108,24 +109,24 @@ ipcMain.on("getTemplates", (event, arg) => {
 
   logAndSendToWebConsole(JSON.stringify(templates), event);
 
-  event.reply("getTemplatesResponse", {
+  event.reply(channels.GETTEMPLATESRESPONSE, {
     templates,
   });
 });
 
-ipcMain.on("getHistory", (event, arg) => {
+ipcMain.on(channels.READHISTORY, (event, arg) => {
   logAndSendToWebConsole("getting history", event);
   try {
     let history = JSON.parse(fs.readFileSync(historyPath));
     logAndSendToWebConsole(JSON.stringify(history.projects), event);
 
-    event.reply("getHistoryResponse", {
+    event.reply(channels.READHISTORYRESPONSE, {
       history: history.projects,
     });
   } catch (e) {}
 });
 
-ipcMain.on("addToHistory", (event, arg) => {
+ipcMain.on(channels.ADDTOHISTORY, (event, arg) => {
   logAndSendToWebConsole("adding to history", event);
   try {
     let history = JSON.parse(fs.readFileSync(historyPath));
@@ -133,7 +134,7 @@ ipcMain.on("addToHistory", (event, arg) => {
     // TODO: remove duplicates
     history.projects = history.projects.slice(0, 10);
     fs.writeFileSync(historyPath, JSON.stringify(history, {}, 2));
-    event.reply("getHistoryResponse", {
+    event.reply(channels.READHISTORYRESPONSE, {
       history: history.projects,
     });
 

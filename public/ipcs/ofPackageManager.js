@@ -1,6 +1,7 @@
 const { ipcMain } = require("electron");
 const { execSync } = require("child_process");
 const { logAndSendToWebConsole } = require("./utils");
+const channels = require("../../src/channels");
 
 const getVersion = (values) => {
   const { config } = values;
@@ -148,11 +149,11 @@ const packageManager = (config, command) => {
   }
 };
 
-ipcMain.on("getCliVersion", (event, arg) => {
+ipcMain.on(channels.GETCLIVERSION, (event, arg) => {
   logAndSendToWebConsole("getting version", event);
   const { config } = arg;
   const response = packageManager(config, getVersion(arg));
-  event.reply("getCliVersionResponse", response);
+  event.reply(channels.GETCLIVERSIONRESPONSE, response);
   logAndSendToWebConsole(JSON.stringify(response, {}, 4), event);
 });
 

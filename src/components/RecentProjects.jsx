@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { setCwd as setCwdCreator } from "../state/reducers/project";
 
+const channels = require("../channels");
+
 const Container = styled.div`
   margin-top: 50px;
 `;
@@ -34,7 +36,7 @@ const RecentProjects = () => {
     return () => {
       const cwd = path;
       dispatch(setCwdCreator(cwd));
-      ipcRenderer.send("addToHistory", {
+      ipcRenderer.send(channels.ADDTOHISTORY, {
         path: cwd,
       });
 

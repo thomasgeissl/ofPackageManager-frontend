@@ -30,24 +30,26 @@ import {
   setSelectedTemplate,
 } from "./state/reducers/templates";
 
+const channels = require("./channels");
+
 ReactDOM.render(<App />, document.getElementById("root"));
 serviceWorker.unregister();
 
-ipcRenderer.on("getFrontendConfigResponse", (event, arg) => {
+ipcRenderer.on(channels.READFRONTENDCONFIGRESPONSE, (event, arg) => {
   store.dispatch(setConfig(arg));
-  ipcRenderer.send("getCliConfig", {});
+  ipcRenderer.send(channels.READCLICONFIG, {});
 });
-ipcRenderer.on("getCliConfigResponse", (event, arg) => {
+ipcRenderer.on(channels.READCLICONFIGRESPONSE, (event, arg) => {
   store.dispatch(setCliConfig(arg));
   store.dispatch(setFoundCliConfig(true));
   const config = {
     ...store.getState().cliConfig,
     ...store.getState().config,
   };
-  ipcRenderer.send("getCliVersion", { config });
-  ipcRenderer.send("getTemplates", { config });
+  ipcRenderer.send(channels.GETCLIVERSION, { config });
+  ipcRenderer.send(channels.GETTEMPLATES, { config });
 });
-ipcRenderer.on("getCliVersionResponse", (event, arg) => {
+ipcRenderer.on(channels.GETCLIVERSIONRESPONSE, (event, arg) => {
   if (arg.success) {
     store.dispatch(setOfPackageManagerCliVersion(arg.payload));
   }
@@ -107,7 +109,7 @@ ipcRenderer.on("installPackageByGithubResponse", (event, arg) => {
 ipcRenderer.on("installPackageByUrlResponse", (event, arg) => {
   store.dispatch(showNotification("successfully installed package"));
 });
-ipcRenderer.on("getPlatformResponse", (event, arg) => {
+ipcRenderer.on(channels.GETPLATFORMRESPONSE, (event, arg) => {
   console.log("on get platform response ", arg);
   if (arg.platform === "win32") {
     store.dispatch(addPlatform("vs"));
@@ -121,15 +123,15 @@ ipcRenderer.on("getPlatformResponse", (event, arg) => {
     store.dispatch(setSelectedTemplate("linux"));
   }
 });
-ipcRenderer.on("getTemplatesResponse", (event, arg) => {
+ipcRenderer.on(channels.GETTEMPLATESRESPONSE, (event, arg) => {
   store.dispatch(setAvailableTemplates(arg.templates));
 });
-ipcRenderer.on("getHistoryResponse", (event, arg) => {
+ipcRenderer.on(channels.READHISTORYRESPONSE, (event, arg) => {
   store.dispatch(setHistory(arg.history));
 });
 
 ipcRenderer.on("inited", (event, arg) => {
-  ipcRenderer.send("getFrontendConfig", {});
-  ipcRenderer.send("getPlatform", {});
-  ipcRenderer.send("getHistory", {});
+  ipcRenderer.send(channels.READFRONTENDCONFIG, {});
+  ipcRenderer.send(channels.GETPLATFORM, {});
+  ipcRenderer.send(channels.READHISTORY, {});
 });

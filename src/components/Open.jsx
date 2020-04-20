@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { setCwd as setCwdCreator } from "../state/reducers/project";
 const { dialog } = require("electron").remote;
+const channels = require("../channels");
 
 export default () => {
   const dispatch = useDispatch();
@@ -29,8 +30,8 @@ export default () => {
         if (result.filePaths.length) {
           const cwd = result.filePaths[0];
           dispatch(setCwdCreator(cwd));
-          ipcRenderer.send("addToHistory", {
-            path: cwd
+          ipcRenderer.send(channels.ADDTOHISTORY, {
+            path: cwd,
           });
 
           ipcRenderer.send("getCoreAddons", { config });

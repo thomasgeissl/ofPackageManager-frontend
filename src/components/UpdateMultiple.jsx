@@ -8,6 +8,7 @@ import { setCwd as setCwdCreator } from "../state/reducers/project";
 import Header from "./Header";
 import styled from "styled-components";
 const { dialog } = require("electron").remote;
+const channels = require("../channels");
 
 const Container = styled.div``;
 const StyledForm = styled.form`
@@ -19,7 +20,7 @@ const Actions = styled(Grid)`
 `;
 
 let doesDirectoryExistResponseCallback = (event, arg) => {};
-ipcRenderer.on("doesDirectoryExistResponse", (event, arg) => {
+ipcRenderer.on(channels.DOESDIRECTORYEXISTRESPONSE, (event, arg) => {
   doesDirectoryExistResponseCallback(event, arg);
 });
 
@@ -61,7 +62,7 @@ export default () => {
               .then((result) => {
                 if (result.filePaths.length) {
                   setLocation(result.filePaths[0]);
-                  ipcRenderer.send("doesDirectoryExist", {
+                  ipcRenderer.send(channels.DOESDIRECTORYEXIST, {
                     location: result.filePaths[0],
                   });
                 }

@@ -3,6 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Button, Grid } from "@material-ui/core";
 import store from "../state/store";
+const channels = require("../channels");
 
 export default () => {
   const cwd = useSelector((state) => state.project.cwd);
@@ -47,7 +48,7 @@ export default () => {
               templates,
             });
 
-            ipcRenderer.send("removeAddonsMakeFile", {
+            ipcRenderer.send(channels.REMOVEADDONSMAKEFILE, {
               cwd,
             });
             state.corePackages.selected.forEach((p) => {
