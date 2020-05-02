@@ -47,16 +47,14 @@ const init = () => {
       console.log(`brew is ${isBrewInstalled ? "" : "not "}installed`);
       console.log(
         `ofPackageManager is ${
-        isOfPackageManagerInstalled ? "" : "not "
+          isOfPackageManagerInstalled ? "" : "not "
         }installed`
       );
       console.log(
         `ofProjectGenerator is ${
-        isOfProjectGeneratorInstalled ? "" : "not "
+          isOfProjectGeneratorInstalled ? "" : "not "
         }installed`
       );
-
-
 
       ofPackageManagerPath = isOfPackageManagerInstalled
         ? which.sync("ofPackageManager", { nothrow: true })
@@ -67,7 +65,7 @@ const init = () => {
       frontendConfig = {
         showConsole: false,
         showAdvancedFeatures: true,
-        verbose: false,
+        verboseOutput: false,
         ofPackageManagerPath,
         ofProjectGeneratorPath,
         defaultProjectPath: cliConfig
@@ -88,10 +86,7 @@ const init = () => {
     }
 
     if (!fs.existsSync(historyPath)) {
-      fs.writeFileSync(
-        historyPath,
-        JSON.stringify({ projects: [] }, {}, 2)
-      );
+      fs.writeFileSync(historyPath, JSON.stringify({ projects: [] }, {}, 2));
     }
 
     mainWindow.webContents.send("inited", {});

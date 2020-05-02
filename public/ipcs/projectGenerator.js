@@ -32,7 +32,7 @@ ipcMain.on("updateProject", (event, arg) => {
   let response;
 
   if (process.platform == "win32") {
-    const command = `${config.ofProjectGeneratorPath} /ofPath"${config.ofPath}" /dryRun ${arg.path}`;
+    const command = `${config.ofProjectGeneratorPath} /ofPath"${config.ofPath}" /addons"${packagesList}" /platforms"${platforms}" /template"${templates}" ${arg.path}`;
     logAndSendToWebConsole(command, event);
     response = execSync(command);
   } else {
@@ -55,13 +55,13 @@ ipcMain.on("updateMultiple", (event, arg) => {
     response = execSync(
       `${config.ofProjectGeneratorPath} /ofPath"${config.ofPath}" /r ${
         arg.verboseOutput ? " /verbose " : " "
-      } ${arg.path}`
+      } /dryrun ${arg.path}`
     );
   } else {
     response = execSync(
       `${config.ofProjectGeneratorPath} -o"${config.ofPath}" -r ${
         arg.verboseOutput ? " -v " : " "
-      } ${arg.path}`
+      } -d ${arg.path}`
     );
   }
 
