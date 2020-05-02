@@ -17,6 +17,7 @@ const List = styled.ul`
   li:hover {
     cursor: pointer;
   }
+  color: #e71b74;
 `;
 const Headline = styled.h2`
   font-size: 1.25em;
@@ -62,7 +63,7 @@ const RecentProjects = () => {
         {projectHistory.map((project, index) => {
           return (
             <li key={index} onClick={clickHandler(project.path)}>
-              <a>{project.path} </a>
+              {project.path}
             </li>
           );
         })}
