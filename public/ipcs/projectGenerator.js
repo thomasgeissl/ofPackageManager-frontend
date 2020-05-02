@@ -54,13 +54,13 @@ ipcMain.on("updateMultiple", (event, arg) => {
   if (process.platform == "win32") {
     response = execSync(
       `${config.ofProjectGeneratorPath} /ofPath"${config.ofPath}" /r ${
-        arg.verboseOutput ? " /verbose " : " "
+        config.verboseOutput ? " /verbose " : " "
       } /dryrun ${arg.path}`
     );
   } else {
     response = execSync(
       `${config.ofProjectGeneratorPath} -o"${config.ofPath}" -r ${
-        arg.verboseOutput ? " -v " : " "
+        config.verboseOutput ? " -v " : " "
       } -d ${arg.path}`
     );
   }
