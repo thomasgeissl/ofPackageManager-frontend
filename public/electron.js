@@ -65,7 +65,7 @@ const init = () => {
           if (
             p !== __filename &&
             p.toLowerCase !== "ofpackagemanager.exe" &&
-            !path.isAbsolute(p) &&
+            path.isAbsolute(p) &&
             !p.toLowerCase().includes("appdata") &&
             !p.toLowerCase().includes("temp")
           ) {
