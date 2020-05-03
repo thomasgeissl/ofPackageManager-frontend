@@ -59,6 +59,9 @@ const init = () => {
       ofPackageManagerPath = isOfPackageManagerInstalled
         ? which.sync("ofPackageManager", { nothrow: true })
         : "";
+      if (ofPackageManagerPath === __filename) {
+        ofPackageManagerPath = "";
+      }
       ofProjectGeneratorPath = isOfProjectGeneratorInstalled
         ? which.sync("projectGenerator", { nothrow: true })
         : "";

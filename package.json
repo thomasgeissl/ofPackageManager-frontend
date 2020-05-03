@@ -1,6 +1,6 @@
 {
   "name": "ofpackagemanagerfrontend",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.8.0",
@@ -23,6 +23,7 @@
     "styled-components": "^4.4.1",
     "which": "^2.0.2"
   },
+  "description": "web-based electron-packaged frontend for ofPackageManager",
   "homepage": "./",
   "main": "public/electron.js",
   "scripts": {
