@@ -56,11 +56,22 @@ const init = () => {
         }installed`
       );
 
-      ofPackageManagerPath = isOfPackageManagerInstalled
-        ? which.sync("ofPackageManager", { nothrow: true })
-        : "";
-      if (ofPackageManagerPath === __filename) {
-        ofPackageManagerPath = "";
+      if (isOfPackageManagerInstalled) {
+        const ofPackageManagerPaths = which.sync("ofPackageManager", {
+          nothrow: true,
+          all: true,
+        });
+        ofPackageManagerPaths.forEach((p) => {
+          if (
+            p !== __filename &&
+            p.toLowerCase !== "ofpackagemanager.exe" &&
+            !path.isAbsolute(p) &&
+            !p.toLowerCase().includes("appdata") &&
+            !p.toLowerCase().includes("temp")
+          ) {
+            ofPackageManagerPath = p;
+          }
+        });
       }
       ofProjectGeneratorPath = isOfProjectGeneratorInstalled
         ? which.sync("projectGenerator", { nothrow: true })

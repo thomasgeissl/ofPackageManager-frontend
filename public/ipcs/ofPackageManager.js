@@ -1,7 +1,7 @@
 const { ipcMain } = require("electron");
 const { execSync } = require("child_process");
 const { logAndSendToWebConsole } = require("./utils");
-const channels = require("../../src/channels");
+const channels = require("../channels");
 
 const getVersion = (values) => {
   const { config } = values;

@@ -1,7 +1,7 @@
 const { ipcMain } = require("electron");
 const { execSync } = require("child_process");
 const { logAndSendToWebConsole } = require("./utils.js");
-const channels = require("../../src/channels");
+const channels = require("../channels");
 
 ipcMain.on("createProject", (event, arg) => {
   let output = "creating project at " + arg.path;

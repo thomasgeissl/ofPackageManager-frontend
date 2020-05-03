@@ -3,7 +3,7 @@ const os = require("os");
 const fs = require("fs");
 const path = require("path");
 const { logAndSendToWebConsole } = require("./utils.js");
-const channels = require("../../src/channels");
+const channels = require("../channels");
 
 const homePath = os.homedir();
 const configDirPath = path.join(homePath, ".ofPackageManager");
