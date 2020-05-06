@@ -1,6 +1,6 @@
 {
   "name": "ofpackagemanagerfrontend",
-  "version": "0.0.21",
+  "version": "0.0.21-1",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.8.0",
@@ -34,7 +34,7 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-dist": "yarn build && cp ./public/entitlements.mac.plist build",
-    "electron-dist": "electron-builder -mwl"
+    "electron-dist": "electron-builder -m"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -76,10 +76,12 @@
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "icon": "build/icon.png"
     },
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "icon": "build/icon.png"
     },
     "files": [
       "build/**/*",
