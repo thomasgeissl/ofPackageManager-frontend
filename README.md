@@ -11,6 +11,8 @@ brew install ofpackagemanager
 brew install ofprojectgenerator
 #brew upgrade ofpackagemanager
 #brew upgrade ofprojectgenerator
+ofPackageManager config -g
+brew cask install ofpackagemanagerfrontend
 ```
 
 ## Build status
