@@ -131,7 +131,14 @@ ipcMain.on(channels.ADDTOHISTORY, (event, arg) => {
   try {
     let history = JSON.parse(fs.readFileSync(historyPath));
     history.projects.unshift(arg);
-    // TODO: remove duplicates
+    let projects = [];
+    history.projects.forEach((item, index) => {
+      const paths = [...new Set(projects.map((item) => item.path))];
+      if (!paths.includes(item.path)) {
+        projects.push(item);
+      }
+    });
+    history.projects = projects;
     history.projects = history.projects.slice(0, 10);
     fs.writeFileSync(historyPath, JSON.stringify(history, {}, 2));
     event.reply(channels.READHISTORYRESPONSE, {
