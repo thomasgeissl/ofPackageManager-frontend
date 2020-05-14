@@ -10,7 +10,6 @@ import styled from "styled-components";
 
 import {
   setShowAdvancedFeatures,
-  setShowConsole,
   setVerboseOutput,
   setDefaultProjectPath,
   setOfPackageManagerPath,
@@ -24,7 +23,7 @@ const Container = styled.div`
   background-color: white;
   position: relative;
   width: 50%;
-  height: 45%;
+  height: 40%;
   padding: 15px;
   overflow: auto;
 `;
@@ -44,7 +43,6 @@ export default () => {
     ...cliConfig,
     ...frontendConfig,
   };
-  const showConsole = useSelector((state) => state.config.showConsole);
   const verboseOutput = useSelector((state) => state.config.verboseOutput);
   const ofPath = useSelector((state) => state.cliConfig.ofPath);
   const defaultProjectPath = useSelector(
@@ -95,21 +93,6 @@ export default () => {
               />
             }
             label="verbose output"
-          />
-        </li>
-        <li>
-          <FormControlLabel
-            control={
-              <Switch
-                color="primary"
-                checked={showConsole}
-                onChange={(event, value) => {
-                  dispatch(setShowConsole(value));
-                }}
-                value={showConsole}
-              />
-            }
-            label="show console"
           />
         </li>
         <FirstPathLi>

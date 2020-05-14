@@ -17,65 +17,62 @@ export default () => {
     ...cliConfig,
   };
 
-  console.log(config);
-
   return (
-    <Grid container alignItems="flex-start" justify="flex-end">
-      <Grid item>
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={(event) => {
-            const state = store.getState();
+    <Grid item xs={6}>
+      <Button
+        fullWidth
+        color="primary"
+        variant="contained"
+        onClick={(event) => {
+          const state = store.getState();
 
-            let packagesList = "";
-            state.corePackages.selected.forEach((p) => {
-              packagesList += `${p}, `;
-            });
+          let packagesList = "";
+          state.corePackages.selected.forEach((p) => {
+            packagesList += `${p}, `;
+          });
 
-            [
-              ...state.globalPackages.selected,
-              ...state.localPackages.selected,
-            ].forEach((p) => {
-              // packagesList += `${p.path}` + "#" + `${p.url}@${p.checkout}, `;
-              packagesList += `${p.path}, `;
-            });
-            ipcRenderer.send("updateProject", {
+          [
+            ...state.globalPackages.selected,
+            ...state.localPackages.selected,
+          ].forEach((p) => {
+            // packagesList += `${p.path}` + "#" + `${p.url}@${p.checkout}, `;
+            packagesList += `${p.path}, `;
+          });
+          ipcRenderer.send("updateProject", {
+            config,
+            path: cwd,
+            packagesList,
+            platforms,
+            templates,
+          });
+
+          ipcRenderer.send(channels.REMOVEADDONSMAKEFILE, {
+            cwd,
+          });
+          state.corePackages.selected.forEach((p) => {
+            ipcRenderer.send("addPackageToAddonsMakeFile", {
               config,
-              path: cwd,
-              packagesList,
-              platforms,
-              templates,
-            });
-
-            ipcRenderer.send(channels.REMOVEADDONSMAKEFILE, {
+              path: p,
+              url: "",
+              checkout: "",
               cwd,
             });
-            state.corePackages.selected.forEach((p) => {
-              ipcRenderer.send("addPackageToAddonsMakeFile", {
-                config,
-                path: p,
-                url: "",
-                checkout: "",
-                cwd,
-              });
-            });
+          });
 
-            [
-              ...state.globalPackages.selected,
-              ...state.localPackages.selected,
-            ].forEach((p) => {
-              ipcRenderer.send("addPackageToAddonsMakeFile", {
-                config,
-                ...p,
-                cwd,
-              });
+          [
+            ...state.globalPackages.selected,
+            ...state.localPackages.selected,
+          ].forEach((p) => {
+            ipcRenderer.send("addPackageToAddonsMakeFile", {
+              config,
+              ...p,
+              cwd,
             });
-          }}
-        >
-          generate
-        </Button>
-      </Grid>
+          });
+        }}
+      >
+        generate
+      </Button>
     </Grid>
   );
 };

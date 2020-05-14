@@ -1,6 +1,5 @@
 const initialState = {
   showAdvancedFeatures: false,
-  showConsole: false,
   verboseOutput: false,
   defaultProjectPath: "",
   ofPackageManagerPath: "",
@@ -10,7 +9,6 @@ const initialState = {
 const types = {
   SETFRONTENDCONFIG: "SETFRONTENDCONFIG",
   SETSHOWADVANCEDFEATURES: "SETSHOWADVANCEDFEATURES",
-  SETSHOWCONSOLE: "SETSHOWCONSOLE",
   SETVERBOSEOUTPUT: "SETVERBOSEOUTPUT",
   SETPACKAGEMANAGERVERSION: "SETPACKAGEMANAGERVERSION",
   SETOFPATH: "SETOFPATH",
@@ -23,7 +21,6 @@ const types = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case types.SETFRONTENDCONFIG:
-      console.log("setconfig", action.payload);
       const newState = {
         ...state,
         ...action.payload.value,
@@ -33,11 +30,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         showAdvancedFeatures: action.payload.value,
-      };
-    case types.SETSHOWCONSOLE:
-      return {
-        ...state,
-        showConsole: action.payload.value,
       };
     case types.SETVERBOSEOUTPUT:
       return {
@@ -81,14 +73,6 @@ export const setConfig = (value) => {
 export const setShowAdvancedFeatures = (value) => {
   return {
     type: types.SETSHOWADVANCEDFEATURES,
-    payload: {
-      value,
-    },
-  };
-};
-export const setShowConsole = (value) => {
-  return {
-    type: types.SETSHOWCONSOLE,
     payload: {
       value,
     },

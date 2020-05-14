@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
 import Modal from "@material-ui/core/Modal";
 import styled from "styled-components";
 import Search from "./Search";
@@ -26,24 +26,26 @@ export default () => {
 
   return (
     <>
-      <Box display="flex" justifyContent="flex-end">
-        <Box>
-          <Button variant="contained" onClick={() => setSearchModalOpen(true)}>
-            install additional addons
-          </Button>
-        </Box>
-      </Box>
+      <Grid item xs={6}>
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={() => setSearchModalOpen(true)}
+        >
+          install additional addons
+        </Button>
 
-      <StyledModal
-        open={searchModalOpen}
-        onClose={() => {
-          setSearchModalOpen(false);
-        }}
-      >
-        <Container>
-          <Search></Search>
-        </Container>
-      </StyledModal>
+        <StyledModal
+          open={searchModalOpen}
+          onClose={() => {
+            setSearchModalOpen(false);
+          }}
+        >
+          <Container>
+            <Search></Search>
+          </Container>
+        </StyledModal>
+      </Grid>
     </>
   );
 };

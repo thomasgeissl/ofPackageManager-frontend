@@ -9,16 +9,16 @@ const initialState = {
     "vs",
     "osx",
     "ios",
-    "android"
+    "android",
   ],
-  selected: []
+  selected: [],
 };
 
 const types = {
   SETAVAILABLEPLATFORMS: "SETAVAILABLEPLATFORMS",
   SETSELECTEDPLATFORMS: "SETSELECTEDPLATFORMS",
   ADDPLATFORM: "ADDPLATFORM",
-  REMOVEPLATFORM: "REMOVEPLATFORM"
+  REMOVEPLATFORM: "REMOVEPLATFORM",
 };
 
 export default (state = initialState, action) => {
@@ -26,17 +26,17 @@ export default (state = initialState, action) => {
     case types.SETAVAILABLEPLATFORMS:
       return {
         ...state,
-        platforms: action.payload.value
+        platforms: action.payload.value,
       };
     case types.SETSELECTEDPLATFORMS:
       return {
         ...state,
-        selected: action.payload.value
+        selected: action.payload.value,
       };
     case types.ADDPLATFORM:
       let newState = { ...state, selected: [...state.selected] };
       newState.selected.push(action.payload.value);
-      console.log("adding platform", newState);
+      newState.selected = [...new Set(newState.selected)];
       return newState;
     case types.REMOVEPLATFORM:
       var index = state.selected.indexOf(action.payload.value);
@@ -51,36 +51,36 @@ export default (state = initialState, action) => {
   }
 };
 
-export const setAvailablePlatforms = value => {
+export const setAvailablePlatforms = (value) => {
   return {
     type: types.SETAVAILABLEPLATFORMS,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const setSelectedPlatforms = value => {
+export const setSelectedPlatforms = (value) => {
   return {
     type: types.SETSELECTEDPLATFORMS,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
 
-export const addPlatform = value => {
+export const addPlatform = (value) => {
   return {
     type: types.ADDPLATFORM,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const removePlatform = value => {
+export const removePlatform = (value) => {
   return {
     type: types.REMOVEPLATFORM,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };

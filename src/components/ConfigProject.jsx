@@ -1,12 +1,8 @@
-import { ipcRenderer } from "electron";
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Tooltip from "@material-ui/core/Tooltip";
-import styled from "styled-components";
 
-import Header from "./Header";
 import CorePackageSelector from "./CorePackageSelector";
 import GloballyInstalledPackageSelector from "./GloballyInstalledPackageSelector";
 import LocallyInstalledPackageSelector from "./LocallyInstalledPackageSelector";
@@ -15,36 +11,21 @@ import PackageInstaller from "./PackageInstaller";
 import PlatformSelector from "./PlatformSelector";
 import TemplateSelector from "./TemplateSelector";
 import Generator from "./Generator";
-import RefreshButton from "./buttons/Refresh";
 
-const Headline = styled.h2`
-  margin-top: 10px;
-  margin-bottom: 10px;
-`;
-const Subline = styled.h3``;
-
-const StyledGenerator = styled(Generator)`
-  position: fixed;
-  bottom: 0;
-  right: 0;
-`;
-
-const StyledBox = styled(Box)`
-  margin-bottom: 15px;
-  padding: 15px;
-  max-height: 65%;
-  overflow-y: scroll;
-`;
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 export default () => {
-  const cwd = useSelector((state) => state.project.cwd);
-  const cliConfig = useSelector((state) => state.cliConfig);
-  const frontendConfig = useSelector((state) => state.config);
-  const config = {
-    ...cliConfig,
-    ...frontendConfig,
-  };
-  console.log("config proejcte, config", config, cliConfig, frontendConfig);
+  const [globalPackagesExpanded, setGlobalPackagesExpanded] = useState(true);
+  const [localPackagesExpanded, setLocalPackagesExpanded] = useState(true);
+  const [
+    platformsAndTemplateExpanded,
+    setPlatformsAndTemplateExpanded,
+  ] = useState(false);
+
   const locallyInstalledPackages = useSelector(
     (state) => state.localPackages.packages
   );
@@ -53,61 +34,86 @@ export default () => {
   );
   return (
     <>
-      <Header></Header>
-      <StyledBox border={1} borderRadius={8} borderColor="primary.main">
-        <Headline>
-          Select or install addons{" "}
-          <RefreshButton
-            onClick={(event) => {
-              console.log("configg!!!!!", config);
-              ipcRenderer.send("getCoreAddons", { config });
-              ipcRenderer.send("getGloballyInstalledPackages", { config });
-              ipcRenderer.send("getLocallyInstalledPackages", {
-                config,
-                cwd,
-              });
-            }}
-          ></RefreshButton>
-        </Headline>
-        <Tooltip
-          title={
-            "addons that come bundled with openFrameworks or have been installed globally"
-          }
-          placement={"bottom-start"}
+      <ExpansionPanel
+        expanded={globalPackagesExpanded}
+        onChange={() => {
+          setGlobalPackagesExpanded(!globalPackagesExpanded);
+        }}
+      >
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+          <Tooltip
+            title={
+              "addons that come bundled with openFrameworks or have been installed globally"
+            }
+            placement={"bottom-start"}
+          >
+            <Typography variant="h5">global addons</Typography>
+          </Tooltip>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <CorePackageSelector></CorePackageSelector>
+          <GloballyInstalledPackageSelector></GloballyInstalledPackageSelector>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+
+      {locallyInstalledPackages.length > 0 && (
+        <ExpansionPanel
+          expanded={localPackagesExpanded}
+          onChange={() => {
+            setLocalPackagesExpanded(!localPackagesExpanded);
+          }}
         >
-          <Subline>global addons</Subline>
-        </Tooltip>
-        <CorePackageSelector></CorePackageSelector>
-        <GloballyInstalledPackageSelector></GloballyInstalledPackageSelector>
-        {locallyInstalledPackages.length > 0 && (
-          <>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Tooltip
               title={"addons that live inside your project"}
               placement={"bottom-start"}
             >
-              <Subline>local addons </Subline>
+              <Typography variant="h5">local addons</Typography>
             </Tooltip>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
             <LocallyInstalledPackageSelector></LocallyInstalledPackageSelector>
-          </>
-        )}
-        <MissingPackages></MissingPackages>
-        <PackageInstaller></PackageInstaller>
-      </StyledBox>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      )}
 
-      <StyledBox border={1} borderRadius={8} borderColor="primary.main">
-        <Headline>Generate IDE project files</Headline>
-        {showAdvancedFeatures && (
-          <Grid container spacing={3}>
-            <Grid item xs>
-              <PlatformSelector></PlatformSelector>
-            </Grid>
-            <Grid item xs>
-              <TemplateSelector></TemplateSelector>
-            </Grid>
+      <MissingPackages></MissingPackages>
+
+      {showAdvancedFeatures && (
+        <ExpansionPanel
+          expanded={platformsAndTemplateExpanded}
+          onChange={() => {
+            setPlatformsAndTemplateExpanded(!platformsAndTemplateExpanded);
+          }}
+        >
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Tooltip
+              title={
+                "addons that come bundled with openFrameworks or have been installed globally"
+              }
+              placement={"bottom-start"}
+            >
+              <Typography variant="h5">platforms, templates</Typography>
+            </Tooltip>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <PlatformSelector></PlatformSelector>
+            <TemplateSelector></TemplateSelector>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      )}
+      <ExpansionPanel expanded={true}>
+        <ExpansionPanelDetails>
+          <Grid
+            container
+            spacing={3}
+            style={{ paddingLeft: "15px", paddingRight: "15px" }}
+          >
+            <PackageInstaller></PackageInstaller>
+            <Generator></Generator>
           </Grid>
-        )}
-        <StyledGenerator></StyledGenerator>
-      </StyledBox>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     </>
   );
 };

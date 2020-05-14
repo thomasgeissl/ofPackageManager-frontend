@@ -4,13 +4,21 @@ import { useSelector } from "react-redux";
 import Tooltip from "@material-ui/core/Tooltip";
 import PackageList from "./PackageList";
 import InstallButton from "./buttons/Install";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import Typography from "@material-ui/core/Typography";
+import styled from "styled-components";
 
+const Panel = styled(ExpansionPanel)`
+  border: 3px solid #e71b74;
+`;
 export default () => {
   const cliConfig = useSelector((state) => state.cliConfig);
   const frontendConfig = useSelector((state) => state.config);
   const config = {
     ...cliConfig,
-    frontendConfig,
+    ...frontendConfig,
   };
   const cwd = useSelector((state) => state.project.cwd);
   const localPackages = useSelector((state) => state.localPackages.packages);
@@ -58,44 +66,57 @@ export default () => {
     <>
       {hasMissingPackages() && (
         <>
-          <h3>
-            missing packages{" "}
-            <InstallButton
-              onClick={(event) => {
-                ipcRenderer.send("install", {
-                  config,
-                  cwd,
-                });
-              }}
-            ></InstallButton>
-          </h3>
-          <PackageList>
-            {selectedPackages.map(function (value, index) {
-              console.log(value);
-              return (
-                !isPackageInstalled(value) && (
-                  <Tooltip
-                    title={`${value.path}\n${value.url}@${value.checkout}`}
-                  >
-                    <li key={index}>
-                      {value.path.split(/[\\/]/).pop()}
-                      {value.url && (
-                        <InstallButton
-                          onClick={(event) => {
-                            ipcRenderer.send("installPackageByUrl", {
-                              config,
-                              ...value,
-                              cwd,
-                            });
-                          }}
-                        ></InstallButton>
-                      )}
-                    </li>
-                  </Tooltip>
-                )
-              );
-            })}
-          </PackageList>
+          <Panel expanded={true}>
+            <ExpansionPanelSummary>
+              <Tooltip
+                title={
+                  "addons that come bundled with openFrameworks or have been installed globally"
+                }
+                placement={"bottom-start"}
+              >
+                <>
+                  <Typography variant="h5">missing addons</Typography>{" "}
+                  <InstallButton
+                    onClick={(event) => {
+                      ipcRenderer.send("install", {
+                        config,
+                        cwd,
+                      });
+                    }}
+                  ></InstallButton>
+                </>
+              </Tooltip>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <PackageList>
+                {selectedPackages.map(function (value, index) {
+                  console.log(value);
+                  return (
+                    !isPackageInstalled(value) && (
+                      <Tooltip
+                        title={`${value.path}\n${value.url}@${value.checkout}`}
+                      >
+                        <li key={index}>
+                          {value.path.split(/[\\/]/).pop()}
+                          {value.url && (
+                            <InstallButton
+                              onClick={(event) => {
+                                ipcRenderer.send("installPackageByUrl", {
+                                  config,
+                                  ...value,
+                                  cwd,
+                                });
+                              }}
+                            ></InstallButton>
+                          )}
+                        </li>
+                      </Tooltip>
+                    )
+                  );
+                })}
+              </PackageList>
+            </ExpansionPanelDetails>
+          </Panel>
         </>
       )}
     </>

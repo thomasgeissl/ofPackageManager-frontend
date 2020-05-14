@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Provider as StoreProvider } from "react-redux";
+import styled from "styled-components";
 import store from "./state/store";
+import Modal from "@material-ui/core/Modal";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import Footer from "./components/Footer";
+import ConfigApp from "./components/ConfigApp";
+import Notification from "./components/Notification";
+import ConfigMessage from "./components/ConfigMessage";
 import Home from "./components/Home";
 import New from "./components/New";
 import Update from "./components/Open";
 import UpdateMultiple from "./components/UpdateMultiple";
 import ConfigProject from "./components/ConfigProject";
-import Button from "@material-ui/core/Button";
-import Modal from "@material-ui/core/Modal";
-import SettingsIcon from "@material-ui/icons/Settings";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import Header from "./components/Header";
 import "./App.css";
-import Footer from "./components/Footer";
-import Console from "./components/Console";
-import ConfigApp from "./components/ConfigApp";
-import Notification from "./components/Notification";
-import ConfigMessage from "./components/ConfigMessage";
-import styled from "styled-components";
 
 const StyledApp = styled.div`
   height: 100vh;
@@ -28,7 +26,7 @@ const StyledApp = styled.div`
 const StyledContent = styled.div`
   flex-grow: 1;
   overflow-y: scroll;
-  padding-bottom: 15px;
+  padding: 15px;
 `;
 const StyledModal = styled(Modal)`
   overflow: scroll;
@@ -36,17 +34,14 @@ const StyledModal = styled(Modal)`
   align-items: center;
   justify-content: center;
 `;
-const ConfigButton = styled(Button)`
-  /* TODO: fix the evil important  */
-  position: fixed !important;
-  top: 15px;
-  right: 15px;
-`;
 
 const theme = createMuiTheme({
   palette: {
     primary: {
       main: "#E71B74",
+    },
+    secondary: {
+      main: "#000",
     },
   },
   status: {
@@ -60,15 +55,13 @@ function App() {
     <StyledApp className="App">
       <StoreProvider store={store}>
         <ThemeProvider theme={theme}>
-          <StyledContent>
-            <ConfigButton
-              onClick={(event) => {
+          <Router>
+            <Header
+              openConfigHandler={() => {
                 setConfigModalOpen(true);
               }}
-            >
-              <SettingsIcon></SettingsIcon>
-            </ConfigButton>
-            <Router>
+            ></Header>
+            <StyledContent>
               <Switch>
                 <Route path="/configProject">
                   <ConfigProject></ConfigProject>
@@ -86,20 +79,19 @@ function App() {
                   <Home></Home>
                 </Route>
               </Switch>
-            </Router>
-          </StyledContent>
-          <Console></Console>
-          <Footer></Footer>
-          <StyledModal
-            open={configModalOpen}
-            onClose={(event) => {
-              setConfigModalOpen(false);
-            }}
-          >
-            <ConfigApp></ConfigApp>
-          </StyledModal>
-          <Notification></Notification>
-          <ConfigMessage></ConfigMessage>
+            </StyledContent>
+            <Footer></Footer>
+            <StyledModal
+              open={configModalOpen}
+              onClose={(event) => {
+                setConfigModalOpen(false);
+              }}
+            >
+              <ConfigApp></ConfigApp>
+            </StyledModal>
+            <Notification></Notification>
+            <ConfigMessage></ConfigMessage>
+          </Router>
         </ThemeProvider>
       </StoreProvider>
     </StyledApp>

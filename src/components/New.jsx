@@ -6,7 +6,6 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import { setCwd as setCwdCreator } from "../state/reducers/project";
-import Header from "./Header";
 import styled from "styled-components";
 const { dialog } = require("electron").remote;
 const channels = require("../channels");
@@ -52,7 +51,6 @@ export default () => {
 
   return (
     <Container>
-      <Header></Header>
       <StyledForm>
         <TextField
           label="location"

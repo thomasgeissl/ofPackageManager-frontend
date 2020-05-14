@@ -110,7 +110,6 @@ ipcRenderer.on("installPackageByUrlResponse", (event, arg) => {
   store.dispatch(showNotification("successfully installed package"));
 });
 ipcRenderer.on(channels.GETPLATFORMRESPONSE, (event, arg) => {
-  console.log("on get platform response ", arg);
   if (arg.platform === "win32") {
     store.dispatch(addPlatform("vs"));
     store.dispatch(setSelectedTemplate("vs"));

@@ -10,10 +10,6 @@ import {
 
 import PackageList from "./PackageList";
 
-// const Info = styled.span`
-//   font-size: 8px;
-// `;
-
 export default () => {
   const dispatch = useDispatch();
   const handleChange = (p) => {
