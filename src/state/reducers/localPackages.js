@@ -4,7 +4,7 @@ const types = {
   SETAVAILABLELOCALPACKAGES: "SETAVAILABLELOCALPACKAGES",
   ADDLOCALPACKAGE: "ADDLOCALPACKAGE",
   REMOVELOCALPACKAGE: "REMOVELOCALPACKAGE",
-  CLEARLOCALPACKAGES: "CLEARLOCALPACKAGES"
+  CLEARLOCALPACKAGES: "CLEARLOCALPACKAGES",
 };
 
 export default (state = initialState, action) => {
@@ -12,22 +12,18 @@ export default (state = initialState, action) => {
     case types.SETPACKAGESDATABASE:
       return {
         ...state,
-        database: action.payload.value.sort()
+        database: action.payload.value.sort(),
       };
     case types.SETAVAILABLELOCALPACKAGES: {
-      let newState = { ...state, packages: [...state.packages] };
-      action.payload.value.forEach(p => {
-        const index = newState.packages.findIndex(x => x.path === p.path);
-        if (index === -1) {
-          newState.packages.push(p);
-        }
-      });
-      return newState;
+      return {
+        ...state,
+        packages: action.payload.value.sort(),
+      };
     }
     case types.ADDLOCALPACKAGE: {
       let newState = { ...state, selected: [...state.selected] };
       const index = newState.selected.findIndex(
-        x => x.path === action.payload.value.path
+        (x) => x.path === action.payload.value.path
       );
       if (index === -1) {
         newState.selected.push(action.payload.value);
@@ -37,7 +33,7 @@ export default (state = initialState, action) => {
     }
     case types.REMOVELOCALPACKAGE:
       const index = state.selected.findIndex(
-        item => item.path === action.payload.value.path
+        (item) => item.path === action.payload.value.path
       );
       if (index > -1) {
         let newState = { ...state, selected: [...state.selected] };
@@ -52,42 +48,42 @@ export default (state = initialState, action) => {
   }
 };
 
-export const setPackagesDatabase = value => {
+export const setPackagesDatabase = (value) => {
   return {
     type: types.SETPACKAGESDATABASE,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const setAvailableLocalPackages = value => {
+export const setAvailableLocalPackages = (value) => {
   return {
     type: types.SETAVAILABLELOCALPACKAGES,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
-export const addLocalPackage = value => {
+export const addLocalPackage = (value) => {
   return {
     type: types.ADDLOCALPACKAGE,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
 
-export const removeLocalPackage = value => {
+export const removeLocalPackage = (value) => {
   return {
     type: types.REMOVELOCALPACKAGE,
     payload: {
-      value
-    }
+      value,
+    },
   };
 };
 export const clearLocalPackages = () => {
   return {
-    type: types.CLEARLOCALPACKAGES
+    type: types.CLEARLOCALPACKAGES,
   };
 };
 
