@@ -97,8 +97,18 @@ export default () => {
             </Tooltip>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <PlatformSelector></PlatformSelector>
-            <TemplateSelector></TemplateSelector>
+            <Grid
+              container
+              spacing={3}
+              style={{ marginLeft: "24px", marginRight: "24px" }}
+            >
+              <Grid item xs={3}>
+                <PlatformSelector></PlatformSelector>
+              </Grid>
+              <Grid item xs={3}>
+                <TemplateSelector></TemplateSelector>
+              </Grid>
+            </Grid>
           </ExpansionPanelDetails>
         </ExpansionPanel>
       )}
