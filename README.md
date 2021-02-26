@@ -14,6 +14,18 @@ brew install ofprojectgenerator
 ofPackageManager config -g
 brew cask install ofpackagemanagerfrontend
 ```
+## Trouble shooting
+In case the auto config does not work, you can always manually create the json config file `~/.ofPackageManager/frontend.config.json`
+e.g.
+```
+{
+  "defaultProjectPath": "~/libs/of_v0.11.0_osx_release/apps/myApps/",
+  "ofPackageManagerPath": "/opt/homebrew/bin/ofPackageManager",
+  "ofProjectGeneratorPath": "/opt/homebrew/bin/projectGenerator",
+  "showAdvancedFeatures": false,
+  "verboseOutput": false
+}
+```
 
 ## Build status
 
